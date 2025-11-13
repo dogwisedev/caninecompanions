@@ -60,7 +60,17 @@
          <!-- slider section -->
          <section class="slider_section ">
             <div class="slider_bg_box">
-               <img src="https://dogwiseacademy-web.s3.us-east-1.amazonaws.com/Cute_dog__image_for_website-removebg-preview.png" alt="">
+               <img src="https://dogwiseacademy-web.s3.us-east-1.amazonaws.com/Cute_dog__image_for_website-removebg-preview.png" alt=""
+                  style="
+      width: 50%;           /* make it half size */
+      height: auto;         /* keep proportions */
+      position: absolute;   /* allows positioning */
+      left: 5%;             /* move it slightly left */
+      top: 50%;             /* center vertically */
+      transform: translateY(-50%); /* perfect vertical centering */
+      object-fit: contain;  /* avoid distortion */
+      z-index: 1;           /* ensure it’s above background */ >
+               
             </div>
             <div id="customCarousel1" class="carousel slide" data-ride="carousel">
                <div class="carousel-inner">
