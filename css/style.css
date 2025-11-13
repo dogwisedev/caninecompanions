@@ -354,6 +354,18 @@ a:focus {
   -o-object-position: top right;
      object-position: top right;
 }
+.slider_bg_box img {
+  width: 30% !important;
+  height: auto !important;
+  position: absolute !important;
+  right: 20% !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  z-index: -1 !important;
+  left: auto !important;
+}
 
 .product_section .heading_container {
   margin-bottom: 20px;
