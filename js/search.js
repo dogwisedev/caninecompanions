@@ -1,75 +1,83 @@
-/* ========== search.js – ZIP CODE TRAINER SEARCH ========== */
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Search JS loaded!');  // ← Debug: Confirms JS runs
 
-let trainers = [];
+  let trainers = [];
 
-// Load trainers.json once when the page loads
-fetch('trainers.json')
-  .then(response => response.json())
-  .then(data => {
-    trainers = data;
-    console.log(`Loaded ${trainers.length} trainers`);
-  })
-  .catch(err => {
-    console.error('Could not load trainers.json', err);
-    alert('Oops! Trainer data failed to load. Please refresh the page.');
-  });
+  // Load trainers with debug
+  fetch('trainers.json')
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+      return r.json();
+    })
+    .then(data => {
+      trainers = data;
+      console.log(`✅ Loaded ${trainers.length} trainers!`);  // ← Debug: Shows count
+    })
+    .catch(err => {
+      console.error('❌ Failed to load trainers.json:', err);  // ← Debug: Shows exact error
+      // Optional: Show user-friendly message
+      document.getElementById('noResults').textContent = 'Error loading trainer data. Please refresh.';
+      document.getElementById('noResults').style.display = 'block';
+    });
 
-// Grab DOM elements
-const input   = document.getElementById('zipInput');
-const btn     = document.getElementById('searchBtn');
-const results = document.getElementById('results');
-const noMsg   = document.getElementById('noResults');
+  const input = document.getElementById('zipInput');
+  const btn = document.getElementById('searchBtn');
+  const results = document.getElementById('results');
+  const noMsg = document.getElementById('noResults');
 
-// Main search function
-function performSearch() {
-  const query = input.value.trim();
+  function search() {
+    const query = input.value.trim();
+    console.log(`🔍 Searching for ZIP: ${query}`);  // ← Debug: Confirms search triggers
 
-  // Validate 5-digit ZIP
-  if (!/^\d{5}$/.test(query)) {
-    alert('Please enter a valid 5-digit ZIP code.');
-    return;
+    if (!/^\d{5}$/.test(query)) {
+      alert('Please enter a valid 5-digit ZIP code.');
+      return;
+    }
+
+    if (trainers.length === 0) {
+      alert('Trainer data still loading... Try again in a sec!');
+      return;
+    }
+
+    const matches = trainers.filter(t => t.zip === query);
+    console.log(`📊 Found ${matches.length} matches`);  // ← Debug: Shows results count
+
+    results.innerHTML = '';
+    noMsg.style.display = 'none';
+
+    if (matches.length === 0) {
+      noMsg.textContent = `No trainers found for ZIP ${query}. Try a nearby area!`;
+      noMsg.style.display = 'block';
+      return;
+    }
+
+    matches.forEach(t => {
+      const col = document.createElement('div');
+      col.className = 'col-sm-6 col-md-4 col-lg-3';
+
+      col.innerHTML = `
+        <div class="trainer-result-card">
+          <img src="${t.image}" alt="${t.name}" class="trainer-result-img" 
+               onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+          <div class="trainer-result-info">
+            <h3 class="trainer-result-name">${t.name}</h3>
+            <p class="trainer-result-region">${t.region} • ${t.timezone}</p>
+            <p class="trainer-result-price">${t.price}/session</p>
+            <p class="trainer-result-blurb">${t.blurb}</p>
+            <a href="trainer.html?slug=${t.slug}" class="book-now-btn">Book Now</a>
+          </div>
+        </div>
+      `;
+
+      results.appendChild(col);
+    });
   }
 
-  // Find matching trainers
-  const matches = trainers.filter(t => t.zip === query);
-
-  // Clear previous results
-  results.innerHTML = '';
-  results.style.display = 'none';
-  noMsg.style.display = 'none';
-
-  if (matches.length === 0) {
-    noMsg.textContent = `No trainers found for ZIP ${query}. Try a nearby area!`;
-    noMsg.style.display = 'block';
-    return;
-  }
-
-  // Create a beautiful card for each trainer
-  matches.forEach(trainer => {
-    const card = document.createElement('div');
-    card.className = 'trainer-card';
-
-    card.innerHTML = `
-      <img src="${trainer.image}" alt="${trainer.name}" class="trainer-img"
-           onerror="this.src='https://via.placeholder.com/300x180/0066cc/white?text=${trainer.name}'">
-      <div class="trainer-info">
-        <h3 class="trainer-name">${trainer.name}</h3>
-        <p class="trainer-region">${trainer.region} • ${trainer.timezone}</p>
-        <p class="trainer-price">${trainer.price}/session</p>
-        <p class="trainer-blurb">${trainer.blurb}</p>
-        <a href="trainer.html?slug=${trainer.slug}" class="book-btn">Book Now</a>
-      </div>
-    `;
-
-    results.appendChild(card);
+  // Event listeners
+  if (btn) btn.addEventListener('click', search);
+  if (input) input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') search();
   });
 
-  // Show the grid
-  results.style.display = 'grid';
-}
-
-// Click button OR press Enter
-btn.addEventListener('click', performSearch);
-input.addEventListener('keydown', e => {
-  if (e.key === 'Enter') performSearch();
+  console.log('🎯 Search ready!');  // ← Debug: Confirms setup
 });
