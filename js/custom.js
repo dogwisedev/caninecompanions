@@ -1,11 +1,13 @@
 // to get current year
 function getYear() {
-    var currentDate = new Date();
-    var currentYear = currentDate.getFullYear();
-    document.querySelector("#displayYear").innerHTML = currentYear;
+  const displayYear = document.getElementById("displayYear");
+  if (displayYear) {
+    displayYear.innerHTML = new Date().getFullYear();
+  }
 }
 
-getYear();
+// Only run if the element exists
+document.addEventListener('DOMContentLoaded', getYear);
 
 
 // client section owl carousel
