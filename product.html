@@ -105,24 +105,38 @@
          </div>
       </section>
       <!-- end inner page section -->
-            <!-- ZIP CODE TRAINER LOCATOR -->
-      <section class="zip_search_section layout_padding">
-        <div class="container">
-          <div class="heading_container heading_center">
-            <h2>Find Your <span>Local Trainer</span></h2>
-            <p>Enter your ZIP code to find certified trainers in your area</p>
-          </div>
-
-          <div class="search-box text-center">
-            <input type="text" id="zipInput" placeholder="Enter 5-digit ZIP code" maxlength="5">
-            <button id="searchBtn">Search</button>
-          </div>
-
-          <div id="results" class="row mt-4"></div>
-          <p id="noResults" class="no-results text-center" style="display:none; margin-top:2rem;"></p>
+<!-- Search Section -->
+<section class="search-section py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-4">Find a Certified Trainer Near You</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input 
+            type="text" 
+            id="zipInput" 
+            class="form-control" 
+            placeholder="Enter 5-digit ZIP code" 
+            maxlength="5"
+            aria-label="ZIP code search"
+          >
+          <button id="searchBtn" class="btn btn-primary">
+            <i class="fas fa-search"></i> Search
+          </button>
         </div>
-      </section>
-      <!-- END ZIP CODE TRAINER LOCATOR -->
+        <small class="form-text text-muted">We'll match you with trainers in your area.</small>
+      </div>
+    </div>
+
+    <!-- No Results Message -->
+    <div id="noResults" class="alert alert-info text-center mt-4" style="display: none;">
+      No trainers found for this ZIP code. Try a nearby area!
+    </div>
+
+    <!-- Results Grid -->
+    <div id="results" class="row mt-4"></div>
+  </div>
+</section>
       <!-- product section -->
       <section class="product_section layout_padding">
          <div class="container">
