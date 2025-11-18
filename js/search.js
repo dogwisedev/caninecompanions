@@ -135,36 +135,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Reusable card builder – now supports custom row target
-  function appendCard(t, isNearby, targetRow = results) {
-    const col = document.createElement('div');
-    col.className = 'col-12 col-sm-6 col-lg-4 mb-4';
+function appendCard(t, isNearby, targetRow = results) {
+  const col = document.createElement('div');
+  col.className = 'col-12 col-sm-6 col-lg-4 mb-4';
 
-    const badge = isNearby
-      ? `<span class="badge bg-success ms-2">${t.distance} miles away</span>`
-      : `<span class="badge bg-info ms-2">Online Only</span>`;
+  const badge = isNearby
+    ? `<span class="badge bg-success ms-2">${t.distance} miles away</span>`
+    : `<span class="badge bg-info ms-2">Online Only</span>`;
 
-    const location = isNearby
-      ? `${t.city || 'N/A'}, ${t.state || ''}`
-      : `${t.city || 'Remote'}, ${t.state || 'USA'}`;
+  // FORCE SAME LOCATION LINE AS ONLINE CARDS — always shows real text
+  const locationLine = isNearby
+    ? `${t.region || t.city || 'Local Area'} • ${t.timezone || 'N/A'}`
+    : `Remote • Nationwide`;
 
-    col.innerHTML = `
-      <div class="trainer-result-card">
-        <img src="${t.image || ''}" alt="${t.name}" class="trainer-result-img"
-             onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
-        <div class="trainer-result-info">
-          <h3 class="trainer-result-name">${t.name} ${badge}</h3>
-          <p class="trainer-result-region">
-            ${location} • ${t.timezone || 'N/A'}
-            ${t.online ? ' <small class="text-success">(Online Available)</small>' : ''}
-          </p>
-          <p class="trainer-result-price">${t.price ? `$${t.price}/session` : 'Price on request'}</p>
-          <p class="trainer-result-blurb">${t.blurb || 'Certified professional dog trainer'}</p>
-          <a href="trainer.html?slug=${t.slug}" class="book-now-btn">Book Now</a>
-        </div>
+  col.innerHTML = `
+    <div class="trainer-result-card">
+      <img src="${t.image || ''}" alt="${t.name}" class="trainer-result-img"
+           onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+      <div class="trainer-result-info">
+        <h3 class="trainer-result-name">${t.name} ${badge}</h3>
+        
+        <p class="trainer-result-region">
+          ${locationLine}
+          ${t.online ? ' <small class="text-success">(Online Available)</small>' : ''}
+        </p>
+        
+        <p class="trainer-result-price">
+          ${t.price ? `$${t.price}/session` : 'Price on request'}
+        </p>
+        
+        <p class="trainer-result-blurb">
+          ${t.blurb || 'Certified professional dog trainer helping dogs and families nationwide.'}
+        </p>
+        
+        <a href="trainer.html?slug=${t.slug}" class="book-now-btn">Book Now</a>
       </div>
-    `;
-    targetRow.appendChild(col);
-  }
+    </div>
+  `;
+  
+  targetRow.appendChild(col);
+}
 
   // Event listeners
   if (btn) btn.addEventListener('click', search);
