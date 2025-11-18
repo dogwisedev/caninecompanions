@@ -107,25 +107,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ——— Nearby Trainers (≤50 miles) ———
-    if (nearby.length > 0) {
-      const header = document.createElement('div');
-      header.className = 'col-12 text-center mt-5';
-      header.innerHTML = `<h3>In Person Trainers</h3><hr>`;
-      results.appendChild(header);
+  if (nearby.length > 0) {
+  const header = document.createElement('div');
+  header.className = 'col-12 text-center mt-5';
+  header.innerHTML = `
+    <div class="heading_container heading_center">
+      <h2>In-Person <span>Trainers</span></h2>
+    </div>
+    <hr style="max-width: 300px; margin: 30px auto; border-color: #808f71;">
+  `;
+  results.appendChild(header);
 
-      nearby.forEach(t => appendCard(t, true));
-    }
+  nearby.forEach(t => appendCard(t, true));
+}
 
-    // ——— Online Trainers (any distance) ———
-    if (online.length > 0) {
-      const header = document.createElement('div');
-      header.className = 'col-12 text-center mt-5';
-      header.innerHTML = `<h3 class="text-success">Available for Online Training</h3><hr>`;
-      results.appendChild(header);
+// ——— Online Trainers (any distance) ———
+if (online.length > 0) {
+  const header = document.createElement('div');
+  header.className = 'col-12 text-center mt-5';
+  header.innerHTML = `
+    <div class="heading_container heading_center">
+      <h2>Available for <span>Online Training</span></h2>
+    </div>
+    <hr style="max-width: 300px; margin: 30px auto; border-color: #808f71;">
+  `;
+  results.appendChild(header);
 
-      online.forEach(t => appendCard(t, false));
-    }
-  }
+  online.forEach(t => appendCard(t, false));
+}
 
   // Reusable card builder
   function appendCard(t, isNearby) {
