@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Reusable card builder – now supports custom row target
 function appendCard(t, isNearby, targetRow = results) {
   const col = document.createElement('div');
-  col.className = 'col-12 col-sm-6 col-lg-4 mb-5'; // mb-5 for perfect spacing
+  col.className = 'col-12 col-sm-6 col-lg-4 px-3 mb-5';
 
   const badge = isNearby
     ? `<span class="badge bg-success ms-2">${t.distance} miles away</span>`
