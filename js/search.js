@@ -137,38 +137,40 @@ document.addEventListener('DOMContentLoaded', () => {
   // Reusable card builder – now supports custom row target
 function appendCard(t, isNearby, targetRow = results) {
   const col = document.createElement('div');
-  col.className = 'col-12 col-sm-6 col-lg-4 mb-4';
+  col.className = 'col-12 col-sm-6 col-lg-4 mb-5'; // mb-5 for perfect spacing
 
   const badge = isNearby
     ? `<span class="badge bg-success ms-2">${t.distance} miles away</span>`
     : `<span class="badge bg-info ms-2">Online Only</span>`;
 
-  // FORCE SAME LOCATION LINE AS ONLINE CARDS — always shows real text
+  // ALWAYS show a full location line — exactly like online cards
   const locationLine = isNearby
-    ? `${t.region || t.city || 'Local Area'} • ${t.timezone || 'N/A'}`
-    : `Remote • Nationwide`;
+    ? `${t.region || t.city, t.city || 'Local Area'} • ${t.timezone || 'N/A'}`
+    : 'Remote • Nationwide';
 
   col.innerHTML = `
-    <div class="trainer-result-card">
+    <div class="trainer-result-card h-100 d-flex flex-column">
       <img src="${t.image || ''}" alt="${t.name}" class="trainer-result-img"
            onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
-      <div class="trainer-result-info">
-        <h3 class="trainer-result-name">${t.name} ${badge}</h3>
+      <div class="trainer-result-info d-flex flex-column flex-grow-1">
+        <h3 class="trainer-result-name mb-2">${t.name} ${badge}</h3>
         
-        <p class="trainer-result-region">
+        <p class="trainer-result-region mb-2">
           ${locationLine}
           ${t.online ? ' <small class="text-success">(Online Available)</small>' : ''}
         </p>
         
-        <p class="trainer-result-price">
+        <p class="trainer-result-price mb-3">
           ${t.price ? `$${t.price}/session` : 'Price on request'}
         </p>
         
-        <p class="trainer-result-blurb">
-          ${t.blurb || 'Certified professional dog trainer helping dogs and families nationwide.'}
+        <p class="trainer-result-blurb flex-grow-1 mb-3">
+          ${t.blurb || 'Certified professional dog trainer helping dogs and families build stronger bonds through positive, science-based methods.'}
         </p>
         
-        <a href="trainer.html?slug=${t.slug}" class="book-now-btn">Book Now</a>
+        <div class="mt-auto">
+          <a href="trainer.html?slug=${t.slug}" class="book-now-btn">Book Now</a>
+        </div>
       </div>
     </div>
   `;
