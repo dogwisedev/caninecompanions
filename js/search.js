@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Search JS loaded!'); // Debug: Confirms JS runs
+  console.log('Search JS loaded!');
   let trainers = [];
 
   // Load trainers.json
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(data => {
       trainers = data;
-      console.log(`Loaded ${trainers.length} trainers!`); // Debug: Data loaded
+      console.log(`Loaded ${trainers.length} trainers!`);
     })
     .catch(err => {
       console.error('Failed to load trainers.json:', err);
@@ -21,15 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-  // DOM elements
   const input   = document.getElementById('zipInput');
   const btn     = document.getElementById('searchBtn');
   const results = document.getElementById('results');
   const noMsg   = document.getElementById('noResults');
 
-  // ──────────────────────────────────────────────────────────────
-  // MAIN SEARCH FUNCTION – NOW WITH 50-MILE + ONLINE SUPPORT
-  // ──────────────────────────────────────────────────────────────
   function search() {
     const query = input.value.trim();
     console.log(`Searching for ZIP: ${query}`);
@@ -43,20 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 1. Get coordinates of the searched ZIP
     fetch(`https://api.zippopotam.us/us/${query}`)
       .then(r => r.ok ? r.json() : Promise.reject('Invalid ZIP'))
       .then(data => {
         const searchLat = parseFloat(data.places[0].latitude);
         const searchLng = parseFloat(data.places[0].longitude);
 
-        const nearby = [];      // ≤50 miles
-        const online = [];      // online = true, even if far away
+        const nearby = [];
+        const online = [];
 
         trainers.forEach(t => {
-          // Skip if trainer has no coordinates
           if (!t.lat || !t.lng) return;
-
           const distance = getDistance(searchLat, searchLng, t.lat, t.lng);
 
           if (distance <= 50) {
@@ -66,9 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
 
-        // Sort nearby by distance (closest first)
         nearby.sort((a, b) => a.distance - b.distance);
-
         renderResults(nearby, online);
       })
       .catch(err => {
@@ -80,9 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  // Haversine formula – distance in miles
   function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 3958.8; // Earth radius in miles
+    const R = 3958.8;
     const toRad = x => (x * Math.PI) / 180;
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
@@ -93,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return R * c;
   }
 
-  // Render both sections
   function renderResults(nearby, online) {
     results.innerHTML = '';
     if (noMsg) noMsg.style.display = 'none';
@@ -106,38 +95,47 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // ——— Nearby Trainers (≤50 miles) ———
-  if (nearby.length > 0) {
-  const header = document.createElement('div');
-  header.className = 'col-12 text-center mt-5';
-  header.innerHTML = `
-    <div class="heading_container heading_center">
-      <h2>In-Person <span>Trainers</span></h2>
-    </div>
-    <hr style="max-width: 300px; margin: 30px auto; border-color: #808f71;">
-  `;
-  results.appendChild(header);
+    // ——— IN-PERSON TRAINERS ———
+    if (nearby.length > 0) {
+      const header = document.createElement('div');
+      header.className = 'col-12 text-center mt-5';
+      header.innerHTML = `
+        <div class="heading_container heading_center">
+          <h2>In-Person <span>Trainers</span></h2>
+        </div>
+        <hr style="max-width: 300px; margin: 30px auto; border-color: #808f71;">
+      `;
+      results.appendChild(header);
 
-  nearby.forEach(t => appendCard(t, true));
-}
+      const row = document.createElement('div');
+      row.className = 'row';
+      results.appendChild(row);
 
-// ——— Online Trainers (any distance) ———
-if (online.length > 0) {
-  const header = document.createElement('div');
-  header.className = 'col-12 text-center mt-5';
-  header.innerHTML = `
-    <div class="heading_container heading_center">
-      <h2>Available for <span>Online Training</span></h2>
-    </div>
-    <hr style="max-width: 300px; margin: 30px auto; border-color: #808f71;">
-  `;
-  results.appendChild(header);
+      nearby.forEach(t => appendCard(t, true, row));
+    }
 
-  online.forEach(t => appendCard(t, false));
-}
+    // ——— ONLINE TRAINERS ———
+    if (online.length > 0) {
+      const header = document.createElement('div');
+      header.className = 'col-12 text-center mt-5';
+      header.innerHTML = `
+        <div class="heading_container heading_center">
+          <h2>Available for <span>Online Training</span></h2>
+        </div>
+        <hr style="max-width: 300px; margin: 30px auto; border-color: #808f71;">
+      `;
+      results.appendChild(header);
 
-  // Reusable card builder
-  function appendCard(t, isNearby) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      results.appendChild(row);
+
+      online.forEach(t => appendCard(t, false, row));
+    }
+  }
+
+  // Reusable card builder – now supports custom row target
+  function appendCard(t, isNearby, targetRow = results) {
     const col = document.createElement('div');
     col.className = 'col-12 col-sm-6 col-lg-4 mb-4';
 
@@ -165,12 +163,10 @@ if (online.length > 0) {
         </div>
       </div>
     `;
-    results.appendChild(col);
+    targetRow.appendChild(col);
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // Event listeners (unchanged)
-  // ──────────────────────────────────────────────────────────────
+  // Event listeners
   if (btn) btn.addEventListener('click', search);
   if (input) {
     input.addEventListener('keydown', e => {
@@ -181,5 +177,5 @@ if (online.length > 0) {
     });
   }
 
-  console.log('Search ready!'); // Debug: Setup complete
+  console.log('Search ready!');
 });
