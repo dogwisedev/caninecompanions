@@ -1143,3 +1143,26 @@ form input[type="submit"]:focus {
 .book-now-btn {
   margin-top: auto !important;   /* button always at bottom */
 }
+/* — SEARCH RESULTS HEADERS — */
+.heading_container.heading_center {
+  text-align: center;      /* center all content */
+  font-family: 'Montserrat', sans-serif;  /* match the page font */
+}
+
+.heading_container.heading_center h2 {
+  font-family: inherit;    /* inherit Montserrat */
+  font-size: 2.8rem;       /* adjust size as needed */
+  font-weight: 700;        /* bold but not too heavy */
+  margin-bottom: 0.5rem;   /* spacing before hr */
+}
+
+.heading_container.heading_center h2 span {
+  color: #808f71;          /* accent color */
+  font-family: inherit;    /* inherit Montserrat */
+}
+
+.heading_container.heading_center hr {
+  max-width: 300px;
+  margin: 20px auto;
+  border-color: #808f71;
+}
