@@ -988,7 +988,14 @@ form input[type="submit"]:focus {
    =================================================================== */
 
 #results {
-  display: block !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+#results > [class*="col-"] {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 #results:empty {
   display: none;
