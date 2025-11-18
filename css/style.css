@@ -1099,3 +1099,27 @@ form input[type="submit"]:focus {
   font-weight: 600;
   font-size: 1.1rem;
 }
+/* — MAKE SEARCH PAGE HEADINGS LOOK LIKE THE REST OF YOUR SITE — */
+.search-page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #002c3e;
+  text-align: center;
+  margin: 60px 0 40px;
+}
+.search-page-title span {
+  color: #808f71;
+}
+
+.results-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #002c3e;
+  text-align: center;
+  margin: 60px 0 30px;
+}
+.results-section-title.text-success {
+  color: #808f71 !important;
+}
