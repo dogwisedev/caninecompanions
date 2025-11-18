@@ -986,66 +986,6 @@ form input[type="submit"]:focus {
 /* ===================================================================
    ONLY FIXES BELOW – EVERYTHING ABOVE IS YOUR ORIGINAL FILE
    =================================================================== */
-#results {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  margin-left: -15px;
-  margin-right: -15px;
-}
-#results > [class*="col-"] {
-  padding-left: 15px;
-  padding-right: 15px;
-}
-#results:empty {
-  display: none;
-}
-.trainer-result-card {
-  position: relative;
-  margin-top: 25px;
-  padding: 35px 35px;
-  background-color: #f7f8f9;
-  transition: all .3s;
-  overflow: hidden;
-  box-shadow: 5px 5px 5px -5px rgba(0,0,0,.2);
-  border: solid #fff 10px;
-  height: 100%;                 /* ← kept */
-  display: flex !important;     /* ← changed from block to flex */
-  flex-direction: column;
-}
-.trainer-result-img {
-  width: 100%;
-  height: 215px;
-  object-fit: cover;
-  transition: all .3s;
-}
-.tr  ainer-result-info {
-  padding: 20px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-}
-.trainer-result-name {
-  font-size: 18px;
-  margin-top: 10px;
-  font-weight: bold;
-}
-.trainer-result-price {
-  margin-top: 10px;
-  color: #002c3e;
-  font-weight: 600;
-}
-.book-now-btn {
-  display: inline-block;
-  padding: 10px 40px;
-  background-color: #808f71;
-  border: 1px solid #808f71;
-  color: #ffffff;
-  transition: all 0.3s;
-  margin-top: auto;            /* ← changed from fixed 15px to auto */
-  align-self: center;
-}
 .book-now-btn:hover {
   background-color: transparent;
   color: #808f71;
