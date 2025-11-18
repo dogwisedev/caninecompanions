@@ -137,44 +137,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // Reusable card builder – now supports custom row target
 function appendCard(t, isNearby, targetRow = results) {
   const col = document.createElement('div');
-  col.className = 'col-12 col-sm-6 col-lg-4 px-3 mb-5';
+  col.className = 'col-sm-6 col-md-4 col-lg-4';
 
   const badge = isNearby
-    ? `<span class="badge bg-success ms-2">${t.distance} miles away</span>`
-    : `<span class="badge bg-info ms-2">Online Only</span>`;
-
-  // ALWAYS show a full location line — exactly like online cards
-  const locationLine = isNearby
-    ? `${t.region || t.city, t.city || 'Local Area'} • ${t.timezone || 'N/A'}`
-    : 'Remote • Nationwide';
+    ? `<span style="background:#808f71;color:white;padding:2px 8px;font-size:11px;border-radius:3px;">${t.distance} miles away</span>`
+    : `<span style="background:#17a2b8;color:white;padding:2px 8px;font-size:11px;border-radius:3px;">Online Only</span>`;
 
   col.innerHTML = `
-    <div class="trainer-result-card h-100 d-flex flex-column">
-      <img src="${t.image || ''}" alt="${t.name}" class="trainer-result-img"
-           onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
-      <div class="trainer-result-info d-flex flex-column flex-grow-1">
-        <h3 class="trainer-result-name mb-2">${t.name} ${badge}</h3>
-        
-        <p class="trainer-result-region mb-2">
-          ${locationLine}
-          ${t.online ? ' <small class="text-success">(Online Available)</small>' : ''}
-        </p>
-        
-        <p class="trainer-result-price mb-3">
-          ${t.price ? `$${t.price}/session` : 'Price on request'}
-        </p>
-        
-        <p class="trainer-result-blurb flex-grow-1 mb-3">
-          ${t.blurb || 'Certified professional dog trainer helping dogs and families build stronger bonds through positive, science-based methods.'}
-        </p>
-        
-        <div class="mt-auto">
-          <a href="trainer.html?slug=${t.slug}" class="book-now-btn">Book Now</a>
+    <div class="box">
+      <div class="img-box">
+        <img src="${t.image || 'images/p1.png'}" alt="${t.name}">
+      </div>
+      <div class="detail-box">
+        <h5>${t.name} ${badge}</h5>
+        <h6>
+          $${t.price || '??'}/session<br>
+          <small>
+            ${t.region || t.city || 'Local Area'}, ${t.state || 'USA'} • ${t.timezone || 'N/A'}
+            ${t.online ? ' • Online Available' : ''}
+          </small>
+        </h6>
+      </div>
+      <div class="option_container">
+        <div class="options">
+          <a href="trainer.html?slug=${t.slug}" class="option1">Book Training</a>
+          <a href="trainer.html?slug=${t.slug}" class="option2">View Profile</a>
         </div>
       </div>
     </div>
   `;
-  
   targetRow.appendChild(col);
 }
 
