@@ -991,10 +991,13 @@ form input[type="submit"]:focus {
   flex-wrap: wrap !important;
   margin-left: -15px;
   margin-right: -15px;
+  align-items: stretch; /* ← makes children stretch to same height */
 }
+
 #results > [class*="col-"] {
   padding-left: 15px;
   padding-right: 15px;
+  display: flex;         /* ← makes columns flex items too */
 }
 #results:empty {
   display: none;
@@ -1002,15 +1005,17 @@ form input[type="submit"]:focus {
 .trainer-result-card {
   position: relative;
   margin-top: 25px;
-  padding: 35px 35px;
+  padding: 35px;
   background-color: #f7f8f9;
   transition: all .3s;
   overflow: hidden;
   box-shadow: 5px 5px 5px -5px rgba(0,0,0,.2);
   border: solid #fff 10px;
-  height: 100%;                 /* ← kept */
-  display: flex !important;     /* ← changed from block to flex */
-  flex-direction: column;
+
+  display: flex !important;      /* keep flex */
+  flex-direction: column;        /* stack content vertically */
+  flex: 1 1 auto;                /* allow card to grow equally */
+  justify-content: space-between; /* keeps book button at bottom */
 }
 .trainer-result-img {
   width: 100%;
