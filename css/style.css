@@ -1123,3 +1123,23 @@ form input[type="submit"]:focus {
 .results-section-title.text-success {
   color: #808f71 !important;
 }
+/* FORCE ALL TRAINER CARDS TO BE EXACT SAME HEIGHT – 100% FIX */
+.trainer-result-card {
+  display: flex !important;
+  flex-direction: column;
+  height: 100% !important;
+}
+.trainer-result-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.trainer-result-blurb {
+  flex-grow: 1;           /* This pushes the button to the bottom */
+  margin-bottom: 15px;
+}
+.book-now-btn {
+  margin-top: auto;       /* Always sticks to bottom */
+  align-self: center;
+}
