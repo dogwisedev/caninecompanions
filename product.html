@@ -107,26 +107,43 @@
       <!-- end inner page section -->
 <!-- Search Section -->
 <section class="search-section py-5 bg-light">
-  <div class="container">
-    <h2 class="text-center mb-4">Find a Certified Trainer Near You</h2>
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="input-group">
-          <input 
-            type="text" 
-            id="zipInput" 
-            class="form-control" 
-            placeholder="Enter 5-digit ZIP code" 
-            maxlength="5"
-            aria-label="ZIP code search"
-          >
-          <button id="searchBtn" class="search-page-btn">
-  Search
-</button>
-        </div>
-        <small class="form-text text-muted">We’ll fetch the best trainers for you.</small>
+ <!-- MAIN TITLE – matches your site perfectly -->
+<div class="heading_container heading_center my-5">
+  <h2>
+    Find a Certified Trainer <span>Near You</span>
+  </h2>
+</div>
+
+<!-- SEARCH FORM – perfect alignment & width -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="d-flex flex-column flex-sm-row gap-3">
+        <input
+          type="text"
+          id="zipInput"
+          class="form-control form-control-lg"
+          placeholder="Enter your 5-digit ZIP code"
+          maxlength="5"
+        >
+        <button id="searchBtn" class="btn btn-lg px-5">
+          Search
+        </button>
       </div>
+      <small class="form-text text-muted text-center d-block mt-3">
+        Enter your ZIP code to find certified trainers in your area
+      </small>
     </div>
+  </div>
+</div>
+
+<!-- No Results Message -->
+<div id="noResults" class="alert alert-info text-center mt-5 mx-auto" style="display:none; max-width: 600px;">
+  No trainers found for this ZIP code. Try a nearby area or browse online trainers below.
+</div>
+
+<!-- Results Grid – already fixed with your CSS -->
+<div id="results" class="mt-5"></div>
 
     <!-- No Results Message -->
     <div id="noResults" class="alert alert-info text-center mt-4" style="display: none;">
