@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nearby.length > 0) {
       const header = document.createElement('div');
       header.className = 'col-12 text-center mt-5';
-      header.innerHTML = `<h3>Trainers Within 50 Miles</h3><hr>`;
+      header.innerHTML = `<h3>In Person Trainers</h3><hr>`;
       results.appendChild(header);
 
       nearby.forEach(t => appendCard(t, true));
