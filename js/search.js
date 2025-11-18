@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Reusable card builder
   function appendCard(t, isNearby) {
     const col = document.createElement('div');
-    col.className = 'col-sm-6 col-md-4 col-lg-4';
+    col.className = 'col-12 col-sm-6 col-lg-4 mb-4';
 
     const badge = isNearby
       ? `<span class="badge bg-success ms-2">${t.distance} miles away</span>`
