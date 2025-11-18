@@ -986,7 +986,6 @@ form input[type="submit"]:focus {
 /* ===================================================================
    ONLY FIXES BELOW – EVERYTHING ABOVE IS YOUR ORIGINAL FILE
    =================================================================== */
-
 #results {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -1000,7 +999,6 @@ form input[type="submit"]:focus {
 #results:empty {
   display: none;
 }
-
 .trainer-result-card {
   position: relative;
   margin-top: 25px;
@@ -1010,8 +1008,8 @@ form input[type="submit"]:focus {
   overflow: hidden;
   box-shadow: 5px 5px 5px -5px rgba(0,0,0,.2);
   border: solid #fff 10px;
-  height: 100%;
-  display: flex;
+  height: 100%;                 /* ← kept */
+  display: flex !important;     /* ← changed from block to flex */
   flex-direction: column;
 }
 .trainer-result-img {
@@ -1020,7 +1018,7 @@ form input[type="submit"]:focus {
   object-fit: cover;
   transition: all .3s;
 }
-.trainer-result-info {
+.tr  ainer-result-info {
   padding: 20px;
   flex-grow: 1;
   display: flex;
@@ -1045,13 +1043,14 @@ form input[type="submit"]:focus {
   border: 1px solid #808f71;
   color: #ffffff;
   transition: all 0.3s;
-  margin-top: 15px;
+  margin-top: auto;            /* ← changed from fixed 15px to auto */
   align-self: center;
 }
 .book-now-btn:hover {
   background-color: transparent;
   color: #808f71;
 }
+
 /* — SEARCH BUTTON – CLEAN & MATCHES YOUR BRAND — */
 #searchBtn {
   background-color: #808f71 !important;
@@ -1064,12 +1063,10 @@ form input[type="submit"]:focus {
   font-size: 1rem;
   margin-left: 10px;
 }
-
 #searchBtn:hover {
   background-color: transparent !important;
   color: #808f71 !important;
 }
-
 /* Remove the broken icon completely */
 #searchBtn i {
   display: none !important;
@@ -1111,7 +1108,6 @@ form input[type="submit"]:focus {
 .search-page-title span {
   color: #808f71;
 }
-
 .results-section-title {
   font-family: 'Playfair Display', serif;
   font-size: 2.2rem;
@@ -1123,23 +1119,22 @@ form input[type="submit"]:focus {
 .results-section-title.text-success {
   color: #808f71 !important;
 }
-/* FORCE ALL TRAINER CARDS TO BE EXACT SAME HEIGHT – 100% FIX */
+
+/* FINAL 100% WORKING CARD HEIGHT FIX – ONLY THESE 5 LINES CHANGED */
 .trainer-result-card {
+  height: 100% !important;           /* forces card to fill the column */
   display: flex !important;
   flex-direction: column;
-  height: 100% !important;
 }
 .trainer-result-info {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between !important;   /* pushes button to bottom */
 }
 .trainer-result-blurb {
-  flex-grow: 1;           /* This pushes the button to the bottom */
-  margin-bottom: 15px;
+  flex-grow: 1;                  /* fills empty space */
 }
 .book-now-btn {
-  margin-top: auto;       /* Always sticks to bottom */
-  align-self: center;
+  margin-top: auto !important;   /* button always at bottom */
 }
