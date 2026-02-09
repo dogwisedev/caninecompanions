@@ -134,6 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       online.forEach(t => appendCard(t, false, row));
     }
+    setTimeout(() => {
+    window.scrollTo({
+      top: results.offsetTop - 20, // 20px padding so it's not glued to the top
+      behavior: 'smooth'
+    });
+  }, 100);
   }
 
   // Reusable card builder – now supports custom row target
