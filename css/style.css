@@ -1230,3 +1230,20 @@ form input[type="submit"]:focus {
     line-height: 1.2;
   }
 }
+@media (max-width: 768px) {
+  /* Centers the text and the button container */
+  .slider_section .detail-box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Ensures the button itself is centered */
+  .slider_section .btn-box {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+  }
+}
