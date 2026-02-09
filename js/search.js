@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       return;
       results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+
     }
 
     // ——— IN-PERSON TRAINERS ———
