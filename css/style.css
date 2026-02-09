@@ -1213,3 +1213,8 @@ form input[type="submit"]:focus {
         }
     }
 }
+.mission-dog-img {
+  width: 100%;       /* This makes it fill the background box */
+  height: auto;
+  display: block;
+}
