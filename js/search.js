@@ -51,15 +51,21 @@ document.addEventListener('DOMContentLoaded', () => {
         trainers.forEach(t => {
           if (!t.lat || !t.lng) return;
           const distance = getDistance(searchLat, searchLng, t.lat, t.lng);
+          
+          // Attach distance to the trainer object for sorting
+          const trainerWithDist = { ...t, distance: Math.round(distance) };
 
           if (distance <= 50) {
-            nearby.push({ ...t, distance: Math.round(distance) });
+            nearby.push(trainerWithDist);
           } else if (t.online === true) {
-            online.push(t);
+            online.push(trainerWithDist);
           }
         });
 
+        // Sort BOTH arrays by distance (closest to furthest)
         nearby.sort((a, b) => a.distance - b.distance);
+        online.sort((a, b) => a.distance - b.distance);
+
         renderResults(nearby, online);
       })
       .catch(err => {
@@ -93,12 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
         noMsg.style.display = 'block';
       }
       return;
-      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
     }
 
     // ——— IN-PERSON TRAINERS ———
-// ——— IN-PERSON TRAINERS ———
     if (nearby.length > 0) {
       const header = document.createElement('div');
       header.className = 'col-12 text-center mt-5';
@@ -111,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
       results.appendChild(header);
 
       const row = document.createElement('div');
-      // Added w-100 to fill the container and justify-content-center to align the cards
       row.className = 'row w-100 m-0 justify-content-center'; 
       results.appendChild(row);
 
@@ -131,64 +133,63 @@ document.addEventListener('DOMContentLoaded', () => {
       results.appendChild(header);
 
       const row = document.createElement('div');
-      row.className = 'row';
+      // Added w-100, m-0, and justify-content-center to match In-Person layout
+      row.className = 'row w-100 m-0 justify-content-center'; 
       results.appendChild(row);
 
       online.forEach(t => appendCard(t, false, row));
     }
+
     setTimeout(() => {
-    window.scrollTo({
-      top: results.offsetTop - 20, // 20px padding so it's not glued to the top
-      behavior: 'smooth'
-    });
-  }, 100);
+      window.scrollTo({
+        top: results.offsetTop - 20,
+        behavior: 'smooth'
+      });
+    }, 100);
   }
 
-  // Reusable card builder – now supports custom row target
-function appendCard(t, isNearby, targetRow = results) {
-  const col = document.createElement('div');
-  col.className = 'col-12 col-sm-6 col-lg-4 px-3 mb-5';
+  function appendCard(t, isNearby, targetRow = results) {
+    const col = document.createElement('div');
+    col.className = 'col-12 col-sm-6 col-lg-4 px-3 mb-5';
 
-  const badge = isNearby
-    ? `<span class="badge bg-success ms-2">${t.distance} miles away</span>`
-    : `<span class="badge bg-info ms-2">Online Only</span>`;
+    const badge = isNearby
+      ? `<span class="badge bg-success ms-2">${t.distance} miles away</span>`
+      : `<span class="badge bg-info ms-2">Online Only</span>`;
 
-  // ALWAYS show a full location line — exactly like online cards
-  const locationLine = isNearby
-    ? `${t.region || t.city, t.city || 'Local Area'} • ${t.timezone || 'N/A'}`
-    : 'Remote • Nationwide';
+    const locationLine = isNearby
+      ? `${t.region || t.city} • ${t.timezone || 'N/A'}`
+      : 'Remote • Nationwide';
 
-  col.innerHTML = `
-    <div class="trainer-result-card h-100 d-flex flex-column">
-      <img src="${t.image || ''}" alt="${t.name}" class="trainer-result-img"
-           onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
-      <div class="trainer-result-info d-flex flex-column flex-grow-1">
-        <h3 class="trainer-result-name mb-2">${t.name} ${badge}</h3>
-        
-        <p class="trainer-result-region mb-2">
-          ${locationLine}
-          ${t.online ? ' <small class="text-success">(Online Available)</small>' : ''}
-        </p>
-        
-        <p class="trainer-result-price mb-3">
-          ${t.price ? `$${t.price}/session` : 'Price on request'}
-        </p>
-        
-        <p class="trainer-result-blurb flex-grow-1 mb-3">
-          ${t.blurb || 'Certified professional dog trainer helping dogs and families build stronger bonds through positive, science-based methods.'}
-        </p>
-        
-        <div class="mt-auto">
-          <a href="trainers/${t.slug}/index.html" class="book-now-btn">View Profile</a>
+    col.innerHTML = `
+      <div class="trainer-result-card h-100 d-flex flex-column">
+        <img src="${t.image || ''}" alt="${t.name}" class="trainer-result-img"
+             onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+        <div class="trainer-result-info d-flex flex-column flex-grow-1">
+          <h3 class="trainer-result-name mb-2">${t.name} ${badge}</h3>
+          
+          <p class="trainer-result-region mb-2">
+            ${locationLine}
+            ${t.online ? ' <small class="text-success">(Online Available)</small>' : ''}
+          </p>
+          
+          <p class="trainer-result-price mb-3">
+            ${t.price ? `$${t.price}/session` : 'Price on request'}
+          </p>
+          
+          <p class="trainer-result-blurb flex-grow-1 mb-3">
+            ${t.blurb || 'Certified professional dog trainer helping dogs and families build stronger bonds.'}
+          </p>
+          
+          <div class="mt-auto">
+            <a href="trainers/${t.slug}/index.html" class="book-now-btn">View Profile</a>
+          </div>
         </div>
       </div>
-    </div>
-  `;
-  
-  targetRow.appendChild(col);
-}
+    `;
+    
+    targetRow.appendChild(col);
+  }
 
-  // Event listeners
   if (btn) btn.addEventListener('click', search);
   if (input) {
     input.addEventListener('keydown', e => {
