@@ -1169,9 +1169,23 @@ form input[type="submit"]:focus {
   margin: 20px auto;
   border-color: #808f71;
 }
-/* Hide hero background dog on mobile */
 @media (max-width: 767px) {
     .slider_bg_box img {
         display: none;
+    }
+}
+/* Trainers search bar mobile fix */
+@media (max-width: 767px) {
+    .search-section .d-flex {
+        flex-direction: column !important;  /* Stack input and button */
+        gap: 10px;                           /* Add some space between them */
+    }
+
+    .search-section .d-flex input.form-control {
+        width: 100% !important;             /* Full width on mobile */
+    }
+
+    .search-section .d-flex button {
+        width: 100%;                         /* Button full width to match input */
     }
 }
