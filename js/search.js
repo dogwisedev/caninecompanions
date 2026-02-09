@@ -177,7 +177,7 @@ function appendCard(t, isNearby, targetRow = results) {
         </p>
         
         <div class="mt-auto">
-          <a href="trainer.html?slug=${t.slug}" class="book-now-btn">Book Now</a>
+          <a href="trainers/${t.slug}/index.html" class="book-now-btn">View Profile</a>
         </div>
       </div>
     </div>
