@@ -65,19 +65,6 @@
     "blurb": "As a United States Army combat veteran, my passion for training dogs is rooted in real-world experience and a deep understanding of the powerful bond between humans and canines."
   },
   {
-    "name": "Karen",
-    "slug": "karen",
-    "zip": "95623",
-    "region": "Nor Cal",
-    "price": "$180–$190",
-    "online": false,
-    "timezone": "PST",
-    "lat": 38.6810,
-    "lng": -120.8430,
-    "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/image0_4102a2ed48.jpeg",
-    "blurb": "Karen is a Nor Cal expert in family dog training with a focus on positive, reward-based methods."
-  },
-  {
     "name": "Marilyn",
     "slug": "marilyn",
     "zip": "95139",
