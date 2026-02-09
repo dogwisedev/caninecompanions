@@ -7,8 +7,9 @@
     "price": "$150–$200",
     "online": true,
     "timezone": "PST",
-    "lat": 34.4140,
-    "lng": -117.5020,
+    "lat": 34.414,
+    "lng": -117.502,
+    "maxDistance": 40,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Ryan_058a122b3c.jpg",
     "blurb": "Ryan was born and raised in south Orange County. Growing up with dogs he has always aspired to teach and learn from them."
   },
@@ -20,8 +21,9 @@
     "price": "$150–$200",
     "online": true,
     "timezone": "PST",
-    "lat": 33.7570,
-    "lng": -118.1350,
+    "lat": 33.757,
+    "lng": -118.135,
+    "maxDistance": 35,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_6580_1_dfc444041f.jpg",
     "blurb": "Njoud is a compassionate trainer with a focus on building confident, happy dogs through positive reinforcement."
   },
@@ -33,8 +35,9 @@
     "price": "$150–$200",
     "online": true,
     "timezone": "PST",
-    "lat": 35.1340,
-    "lng": -117.9770,
+    "lat": 35.134,
+    "lng": -117.977,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_7035_53be96727b.jpeg",
     "blurb": "Jessica is a dedicated So Cal trainer specializing in family-friendly obedience and fun tricks."
   },
@@ -46,8 +49,9 @@
     "price": "$150–$200",
     "online": true,
     "timezone": "PST",
-    "lat": 32.6120,
-    "lng": -117.0350,
+    "lat": 32.612,
+    "lng": -117.035,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/20240516_161058_1_4f9242f106.jpg",
     "blurb": "Lalo is a dedicated, balanced dog trainer who passionately believes that every dog can thrive through a combination of positive reinforcement and consistent, gentle guidance."
   },
@@ -59,8 +63,9 @@
     "price": "$180–$190",
     "online": true,
     "timezone": "PST",
-    "lat": 37.0520,
-    "lng": -120.8680,
+    "lat": 37.052,
+    "lng": -120.868,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_2148_f93ad3aaba.jpg",
     "blurb": "As a United States Army combat veteran, my passion for training dogs is rooted in real-world experience and a deep understanding of the powerful bond between humans and canines."
   },
@@ -72,8 +77,9 @@
     "price": "$180–$190",
     "online": true,
     "timezone": "PST",
-    "lat": 37.2250,
-    "lng": -121.7600,
+    "lat": 37.225,
+    "lng": -121.76,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/dsc_6458_c21986bec5.jpeg",
     "blurb": "Marilyn brings years of experience in behavioral rehab and joyful obedience training to every session."
   },
@@ -85,8 +91,9 @@
     "price": "$150–$175",
     "online": true,
     "timezone": "EST",
-    "lat": 40.9740,
+    "lat": 40.974,
     "lng": -75.0255,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/image0_2_1032b12b2a.jpeg",
     "blurb": "Mike is a NJ-based trainer passionate about turning chaotic pups into confident companions."
   },
@@ -100,6 +107,7 @@
     "timezone": "EST",
     "lat": 39.4515,
     "lng": -74.7273,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/4_FB_57_BE_2_90_E6_4213_B643_A8_EF_8_DD_966_DE_1_425912f5df.jpeg",
     "blurb": "Meet Cal, A 27-year-old US Army veteran hailing from New Jersey."
   },
@@ -111,8 +119,9 @@
     "price": "$150–$170",
     "online": true,
     "timezone": "EST",
-    "lat": 38.8520,
+    "lat": 38.852,
     "lng": -76.6224,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_9164_b09e75b5de.jpeg",
     "blurb": "Shelby is a compassionate MD trainer specializing in gentle behavior modification for anxious pups."
   },
@@ -126,6 +135,7 @@
     "timezone": "EST",
     "lat": 41.2174,
     "lng": -73.2165,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_8151_1_9cb5f39716.jpg",
     "blurb": "My name is Andrew I'm a expert dog trainer with a deep passion for dogs."
   },
@@ -139,6 +149,7 @@
     "timezone": "EST",
     "lat": 39.7957,
     "lng": -76.9811,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Jen_s_Work_Photo_a9210886b4.jpeg",
     "blurb": "Jen is a PA-based trainer with a knack for transforming reactive dogs into relaxed family members."
   },
@@ -152,6 +163,7 @@
     "timezone": "EST",
     "lat": 39.2904,
     "lng": -76.6122,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Diamond_Daryl_AI_7a89f46771.png",
     "blurb": "Diamond is a dynamic MD trainer focused on empowerment and fun in every session."
   },
@@ -165,6 +177,7 @@
     "timezone": "EST",
     "lat": 28.1472,
     "lng": -82.5716,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/image1_2_7d97f3a489.jpeg",
     "blurb": "With over two decades of experience in competitive and pet dog training, James Guillory is a respected leader in the world of canine behavior."
   },
@@ -178,6 +191,7 @@
     "timezone": "EST",
     "lat": 27.9358,
     "lng": -80.6595,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_5321_38a849ae2e.png",
     "blurb": "As a former animal control officer, Rina rescued and trained shelter dogs to enhance their adoptability."
   },
@@ -191,6 +205,7 @@
     "timezone": "EST",
     "lat": 26.0926,
     "lng": -80.1623,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/CAM_00583_4651489b48.jpg",
     "blurb": "Tracie's expertise has been recognized by industry leaders—she has trained dogs for Pit Bulls and Parolees."
   },
@@ -204,6 +219,7 @@
     "timezone": "EST",
     "lat": 28.9517,
     "lng": -81.3031,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Untitled_1cdc14a91c.PNG",
     "blurb": "In the sport world, I'm an enthusiastic competitor and trainer in disciplines like dock diving, competitive obedience, Fast CAT, and protection sports."
   },
@@ -217,6 +233,7 @@
     "timezone": "EST",
     "lat": 34.0371,
     "lng": -84.4233,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_8151_195ab02b6c.jpeg",
     "blurb": "Hi my names Theresa I've been training dogs 10+ years! Born and raised in north Georgia I got my first dog when I was 7 and fell in love with training dogs and animals!"
   },
@@ -230,6 +247,7 @@
     "timezone": "EST",
     "lat": 34.2668,
     "lng": -80.8436,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/14fa9f12a986492484e370367c8bf7e1_9142742536.jpeg",
     "blurb": "Jason is a SC trainer with a focus on practical, real-world obedience for active families."
   },
@@ -243,6 +261,7 @@
     "timezone": "CST",
     "lat": 41.2675,
     "lng": -88.2189,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Cedric_95c542f63a.png",
     "blurb": "One of the things clients value most about working with me is my commitment to communication."
   },
@@ -256,6 +275,7 @@
     "timezone": "EST",
     "lat": 42.6398,
     "lng": -83.3499,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/image6_1946061787.jpeg",
     "blurb": "Bailey is a MI trainer passionate about fun, positive experiences that build confident dogs."
   },
@@ -267,8 +287,9 @@
     "price": "$180",
     "online": true,
     "timezone": "EST",
-    "lat": 39.8350,
-    "lng": -86.0550,
+    "lat": 39.835,
+    "lng": -86.055,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/1_1_91bcc0ca62.png",
     "blurb": "I began my journey in dog training about 8 years ago, after losing my dog, Shadow, to fear-based aggression."
   },
@@ -280,8 +301,9 @@
     "price": "$120–$200+",
     "online": true,
     "timezone": "CST",
-    "lat": 30.1170,
+    "lat": 30.117,
     "lng": -94.1922,
+    "maxDistance": 100,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/2691_da16ec564d.jpeg",
     "blurb": "Cassandra is a TX trainer with a heart for rehabilitation and creating harmonious homes."
   },
@@ -294,7 +316,8 @@
     "online": true,
     "timezone": "MST",
     "lat": 39.5028,
-    "lng": -104.7670,
+    "lng": -104.767,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_4384_Copy_36fef09508.jpeg",
     "blurb": "What started as a personal mission quickly turned into a passion, leading her to a career in helping dogs of all backgrounds overcome similar challenges to become the perfect fit for their families."
   },
@@ -306,8 +329,9 @@
     "price": "$120–$200+",
     "online": true,
     "timezone": "CST",
-    "lat": 29.7740,
-    "lng": -95.4100,
+    "lat": 29.774,
+    "lng": -95.41,
+    "maxDistance": 25,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/9e091cba480a4b9fa64bb96f25248c8f_886e93f4eb.jpeg",
     "blurb": "Joi is a Houston trainer blending creativity and compassion for joyful dog transformations."
   },
@@ -321,6 +345,7 @@
     "timezone": "CST",
     "lat": 30.1869,
     "lng": -97.9514,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/IMG_3760_65267f3e35.jpeg",
     "blurb": "Passionate dog trainer with seven years of professional experience, including behavior modification, potty training, and film work on various commercial and film sets; with formal training from Starmark Academy."
   },
@@ -333,7 +358,8 @@
     "online": true,
     "timezone": "MST",
     "lat": 33.5683,
-    "lng": -112.3090,
+    "lng": -112.309,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Jerry_Trainer_a48563ddbf.jpeg",
     "blurb": "Jerry is a seasoned AZ trainer specializing in desert-adapted obedience and outdoor adventures."
   },
@@ -345,8 +371,9 @@
     "price": "$165–$200",
     "online": true,
     "timezone": "PST",
-    "lat": 47.7440,
-    "lng": -122.3450,
+    "lat": 47.744,
+    "lng": -122.345,
+    "maxDistance": 50,
     "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Heather_Traux_32dcd3df30.jpeg",
     "blurb": "Heather is a WA trainer who brings energy and empathy to every session, focusing on balanced lifestyles for dogs and owners."
   }
