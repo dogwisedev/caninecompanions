@@ -1218,3 +1218,15 @@ form input[type="submit"]:focus {
     display: none !important;
   }
 }
+/* Responsive fix for the main title on mobile */
+@media (max-width: 576px) {
+  .slider_section .detail-box h1 {
+    font-size: 2.5rem !important; /* Shrinks the overall size */
+  }
+
+  .slider_section .detail-box h1 span {
+    font-size: 1.8rem !important; /* Specifically shrinks "The Canine Companion" */
+    display: block;              /* Ensures it stays on its own line */
+    line-height: 1.2;
+  }
+}
