@@ -1213,13 +1213,8 @@ form input[type="submit"]:focus {
         }
     }
 }
-.mission-dog-img {
-  width: 20%;
-  height: auto;
-}
-
 @media (max-width: 768px) {
-  .mission-dog-img {
-    display: none;
+  .hide-on-mobile {
+    display: none !important;
   }
 }
