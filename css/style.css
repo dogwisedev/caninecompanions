@@ -1169,3 +1169,9 @@ form input[type="submit"]:focus {
   margin: 20px auto;
   border-color: #808f71;
 }
+/* Hide hero background dog on mobile */
+@media (max-width: 767px) {
+    .slider_bg_box img {
+        display: none;
+    }
+}
