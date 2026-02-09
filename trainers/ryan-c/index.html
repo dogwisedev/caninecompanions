@@ -14,8 +14,8 @@
         :root {
             --sage: #8ba082;
             --navy: #00334d;
-            --earth: #bc7445;
-            --light-bg: #fdfdfd;
+            --earth: #bc7445; /* Your orange color */
+            --light-bg: #f9f9f9;
         }
 
         body { 
@@ -25,28 +25,29 @@
             margin: 0;
         }
 
-        /* Using Montserrat for that heavy look in your screenshots */
-        h1, h2, h3, .navbar-nav .nav-link { 
+        /* Montserrat for that chunky, modern look */
+        h1, h2, h3 { 
             font-family: 'Montserrat', sans-serif; 
             font-weight: 800; 
             text-transform: uppercase;
+            letter-spacing: -0.5px;
         }
 
-        /* Plumping the Header */
         .trainer-hero {
-            padding: 80px 20px 60px 20px;
-            background: linear-gradient(180deg, #ffffff 0%, #f4f6f4 100%);
+            padding: 100px 20px 80px 20px;
+            background: #ffffff;
             text-align: center;
+            border-bottom: 1px solid #eee;
         }
 
         .trainer-img-container {
-            width: 280px; /* Bigger on desktop */
-            height: 280px;
+            width: 300px; /* Large for desktop */
+            height: 300px;
             margin: 0 auto 30px auto;
             border-radius: 50%;
             overflow: hidden;
-            border: 8px solid white;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 10px solid white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         .trainer-img-container img {
@@ -55,77 +56,98 @@
             object-fit: cover;
         }
 
-        /* Better Stats Styling */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            max-width: 500px;
-            margin: 40px auto;
+            max-width: 600px;
+            margin: 40px auto 0 auto;
             background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
         .stat-box b { 
             display: block; 
-            font-size: 1.8rem; 
+            font-size: 2.2rem; 
             color: var(--sage); 
             font-family: 'Montserrat';
         }
 
-        .stat-box span { font-size: 0.8rem; text-transform: uppercase; color: #777; font-weight: 600; }
+        .stat-box span { font-size: 0.85rem; text-transform: uppercase; color: #888; font-weight: 700; }
 
-        /* Content Plumping */
-        .main-content { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .main-content { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
         
         .info-card {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.03);
             margin-bottom: 40px;
         }
 
         .specialties-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             list-style: none;
             padding: 0;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .spec-item {
-            background: #f0f2f0;
+            background: #f1f4f1;
             color: var(--navy);
-            padding: 8px 20px;
+            padding: 10px 22px;
             border-radius: 50px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
+            text-transform: uppercase;
         }
 
-        /* Mobile Fixes */
-        @media (max-width: 768px) {
-            .trainer-img-container { width: 200px; height: 200px; }
-            .stats-grid { grid-template-columns: 1fr; gap: 20px; }
-            h1 { font-size: 1.8rem; }
-            .info-card { padding: 25px; }
+        /* Booking Button Section */
+        .booking-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .btn-booking {
-            background-color: var(--sage);
+        .btn-call {
+            background-color: var(--navy);
             color: white !important;
-            padding: 20px 40px;
-            border-radius: 10px;
+            padding: 22px;
+            border-radius: 12px;
             font-family: 'Montserrat';
-            font-size: 1.2rem;
-            display: block;
+            font-weight: 800;
             text-align: center;
-            transition: transform 0.2s;
             text-decoration: none;
+            transition: 0.3s;
         }
-        .btn-booking:hover { transform: scale(1.02); background-color: var(--navy); }
+
+        .btn-text {
+            background-color: var(--earth); /* The orange color */
+            color: white !important;
+            padding: 22px;
+            border-radius: 12px;
+            font-family: 'Montserrat';
+            font-weight: 800;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-call:hover, .btn-text:hover { opacity: 0.9; transform: translateY(-2px); text-decoration: none; }
+
+        /* Mobile Specific Optimization */
+        @media (max-width: 768px) {
+            .trainer-hero { padding: 60px 20px; }
+            .trainer-img-container { width: 220px; height: 220px; }
+            .stats-grid { grid-template-columns: 1fr; gap: 25px; padding: 20px; }
+            .info-card { padding: 30px 20px; }
+            .booking-actions { grid-template-columns: 1fr; } /* Stacks buttons on mobile */
+            h1 { font-size: 2.2rem; }
+        }
     </style>
 </head>
 
@@ -135,7 +157,7 @@
             <img src="https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Ryan_058a122b3c.jpg" alt="Ryan C">
         </div>
         <h1>Ryan C.</h1>
-        <p style="color: var(--sage); font-weight: 700; letter-spacing: 2px;">CERTIFIED DOG BEHAVIORIST</p>
+        <p style="color: var(--sage); font-weight: 800; letter-spacing: 3px; font-size: 0.9rem;">CERTIFIED DOG BEHAVIORIST</p>
 
         <div class="stats-grid">
             <div class="stat-box"><b>8+</b><span>Years Exp.</span></div>
@@ -147,9 +169,9 @@
     <div class="main-content">
         <div class="info-card">
             <h2>About Me</h2>
-            <p>I specialize in turning high-energy "problem" dogs into calm family companions. My approach focuses on clear communication and positive reinforcement to build a lasting bond between you and your dog.</p>
+            <p style="font-size: 1.1rem; line-height: 1.8;">I specialize in turning high-energy "problem" dogs into calm family companions. My approach focuses on clear communication and positive reinforcement to build a lasting bond between you and your dog.</p>
             
-            <h3 style="margin-top: 30px;">Expertise</h3>
+            <h3 style="margin-top: 40px;">Expertise</h3>
             <div class="specialties-list">
                 <div class="spec-item">Puppy Basics</div>
                 <div class="spec-item">Reactivity</div>
@@ -158,9 +180,14 @@
             </div>
         </div>
 
-        <a href="https://wa.me/YOURNUMBER" class="btn-booking">
-            BOOK A SESSION WITH RYAN
-        </a>
+        <div class="booking-actions">
+            <a href="tel:+11234567890" class="btn-call">
+                CALL RYAN
+            </a>
+            <a href="sms:+11234567890" class="btn-text">
+                TEXT RYAN
+            </a>
+        </div>
     </div>
 
     </body>
