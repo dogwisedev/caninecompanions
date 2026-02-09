@@ -117,19 +117,6 @@
     "blurb": "Meet Cal, A 27-year-old US Army veteran hailing from New Jersey."
   },
   {
-    "name": "Lauren",
-    "slug": "lauren",
-    "zip": "02019",
-    "region": "MA",
-    "price": "$150–$200",
-    "online": true,
-    "timezone": "EST",
-    "lat": 42.0819,
-    "lng": -71.4745,
-    "image": "https://dogwiseacademy-prod.s3.us-east-1.amazonaws.com/Lauren_2_617f71f723.jpg",
-    "blurb": "Lauren is a MA trainer dedicated to positive reinforcement and building lifelong bonds between dogs and families."
-  },
-  {
     "name": "Shelby",
     "slug": "shelby",
     "zip": "20776",
