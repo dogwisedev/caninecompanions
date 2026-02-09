@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ——— IN-PERSON TRAINERS ———
+// ——— IN-PERSON TRAINERS ———
     if (nearby.length > 0) {
       const header = document.createElement('div');
       header.className = 'col-12 text-center mt-5';
@@ -110,7 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
       results.appendChild(header);
 
       const row = document.createElement('div');
-      row.className = 'row';
+      // Added w-100 to fill the container and justify-content-center to align the cards
+      row.className = 'row w-100 m-0 justify-content-center'; 
       results.appendChild(row);
 
       nearby.forEach(t => appendCard(t, true, row));
