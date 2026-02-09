@@ -1213,15 +1213,11 @@ form input[type="submit"]:focus {
         }
     }
 }
-/* 1. Desktop: Keep the dog small and tidy */
 .mission-dog-img {
-  width: 250px;      /* Set a fixed size so it's not huge */
+  width: 20%;
   height: auto;
-  display: block;
-  margin-bottom: 20px;
 }
 
-/* 2. Mobile: Hide the dog entirely so it doesn't cover your text */
 @media (max-width: 768px) {
   .mission-dog-img {
     display: none;
