@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Profile | The Canine Companion</title>
+    <link rel="stylesheet" href="../../css/style.css"> 
+    <style>
+        :root {
+            --sage: #8ba082;
+            --navy: #00334d;
+            --earth: #bc7445;
+        }
+        body { font-family: 'Poppins', sans-serif; color: var(--navy); margin: 0; }
+        .trainer-header { background: #f8f9fa; padding: 60px 20px; text-align: center; }
+        .profile-img { 
+            width: 200px; height: 200px; border-radius: 50%; 
+            object-fit: cover; border: 5px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .stats-container { display: flex; justify-content: center; gap: 30px; margin: 30px 0; }
+        .stat-box { text-align: center; }
+        .stat-box span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--sage); }
+        .bio-section { max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.8; }
+        .booking-card { 
+            background: var(--sage); color: white; padding: 40px; 
+            border-radius: 20px; text-align: center; margin: 40px auto; max-width: 600px;
+        }
+        .btn-book { 
+            background: white; color: var(--sage); padding: 15px 40px; 
+            border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block;
+            margin-top: 20px; transition: 0.3s;
+        }
+        .btn-book:hover { background: var(--navy); color: white; }
+    </style>
+</head>
+<body>
+
+    <section class="trainer-header">
+        <img src="https://via.placeholder.com/200" alt="Trainer Name" class="profile-img">
+        <h1 style="margin-top: 20px;">Trainer Name</h1>
+        <p style="color: var(--sage); font-weight: bold; text-transform: uppercase;">Certified Dog Behaviorist</p>
+        
+        <div class="stats-container">
+            <div class="stat-box"><span>10+</span>Years Exp.</div>
+            <div class="stat-box"><span>500+</span>Dogs Trained</div>
+            <div class="stat-box"><span>5/5</span>Rating</div>
+        </div>
+    </section>
+
+    <section class="bio-section">
+        <h2>About Me</h2>
+        <p>
+            [Insert trainer bio here. Talk about their philosophy, background, and why they love working with dogs.]
+        </p>
+        
+        <h3>Specialties</h3>
+        <ul>
+            <li>Puppy Socialization</li>
+            <li>Aggression Management</li>
+            <li>Leash Manners</li>
+        </ul>
+    </section>
+
+    <section class="booking-card">
+        <h2>Ready to start training?</h2>
+        <p>Book a 1-on-1 session with [Trainer Name] today.</p>
+        <a href="https://wa.me/YOURNUMBER" class="btn-book">Book Now via WhatsApp</a>
+    </section>
+
+</body>
+</html>
