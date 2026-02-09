@@ -1247,3 +1247,30 @@ form input[type="submit"]:focus {
     margin-top: 20px;
   }
 }
+/* --- FIX: Consistent Large Trainer Images --- */
+
+/* 1. Reset the height and allow the image to fill the space */
+.product_section .box .img-box {
+  height: 250px; /* Slightly taller for a better look */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 2. Force the image to fill the box without distorting */
+.product_section .box .img-box img {
+  width: 100%;
+  height: 100%;
+  max-height: none !important; /* Overrides the 160px limit in your CSS */
+  object-fit: cover;           /* Zooms/crops to fill perfectly */
+  object-position: top;        /* Keeps heads from being cut off */
+  transform: none !important;  /* Stops the scale-up on hover if it bugs you */
+}
+
+/* 3. Keep the name and price row neat */
+.product_section .box .detail-box {
+  padding: 10px 0;
+  border-top: 1px solid #eee; /* Adds a clean divider */
+  margin-top: 15px;
+}
