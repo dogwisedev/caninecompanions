@@ -93,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
         noMsg.style.display = 'block';
       }
       return;
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
     }
 
     // ——— IN-PERSON TRAINERS ———
