@@ -1171,11 +1171,12 @@ form input[type="submit"]:focus {
         display: none;
     }
 }
-/* FINAL MOBILE SEARCH BAR FIX - MATCHES HEIGHT AND ALIGNMENT */
+/* FINAL MOBILE SEARCH BAR FIX - NO SKINNY BOXES */
 @media (max-width: 767px) {
-    /* 1. Stack the container and remove side-gaps */
+    /* 1. Stack on very small phones, side-by-side on larger ones */
     .search-section .d-flex {
-        flex-direction: column !important;
+        display: flex !important;
+        flex-direction: column !important; /* Default to stack */
         gap: 12px !important;
         width: 100%;
     }
@@ -1183,8 +1184,9 @@ form input[type="submit"]:focus {
     /* 2. Fix the Zip Input Box */
     #zipInput {
         width: 100% !important;
-        height: 58px !important;    /* Forces height to match the button */
-        margin-bottom: 0 !important; /* Removes the gap from the main form styles */
+        flex: 1 0 auto !important;  /* Grow to fill space, don't shrink */
+        height: 58px !important;    /* Match button height */
+        margin-bottom: 0 !important; 
         padding: 0 20px !important;
         font-size: 1.1rem;
         border: 2px solid #808f71 !important;
@@ -1194,22 +1196,20 @@ form input[type="submit"]:focus {
     /* 3. Fix the Search Button */
     #searchBtn {
         width: 100% !important;
-        height: 58px !important;    /* Ensures exact matching height */
-        margin-left: 0 !important;   /* Aligns it perfectly with the box above it */
-        padding: 0 !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 58px !important;
+        margin-left: 0 !important;
+        flex-shrink: 0 !important; /* Stop the button from squishing the input */
     }
-}
 
-/* Side-by-side fix for horizontal phones/tablets */
-@media (min-width: 480px) and (max-width: 767px) {
-    .search-section .d-flex {
-        flex-direction: row !important;
-    }
-    #searchBtn {
-        width: auto !important;
-        padding: 0 40px !important;
+    /* 4. Side-by-side fix for slightly wider phones (like iPhone Max/Galaxy) */
+    @media (min-width: 480px) {
+        .search-section .d-flex {
+            flex-direction: row !important; /* Go back to side-by-side */
+            align-items: stretch;
+        }
+        #searchBtn {
+            width: auto !important;
+            padding: 0 30px !important;
+        }
     }
 }
