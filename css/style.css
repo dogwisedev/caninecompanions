@@ -1193,6 +1193,27 @@ form input[type="submit"]:focus {
 @media (max-width: 767px) {
     .search-section .d-flex input.form-control {
         padding: 15px 12px; /* top/bottom | left/right */
-        font-size: 6rem;    /* optional: slightly bigger text */
+        font-size: 1rem;    /* optional: slightly bigger text */
+    }
+}
+/* Trainers search bar mobile: make input same height as button */
+@media (max-width: 767px) {
+    .search-section .d-flex input.form-control,
+    .search-section .d-flex button.btn {
+        height: 56px;      /* same as large button height */
+        font-size: 1rem;   /* readable text */
+    }
+
+    /* Keep spacing between input and button */
+    .search-section .d-flex {
+        gap: 10px;         /* adjust spacing if needed */
+        flex-direction: column; /* stack vertically on very small screens */
+    }
+
+    /* Optional: make them inline for slightly larger phones */
+    @media (min-width: 480px) {
+        .search-section .d-flex {
+            flex-direction: row; /* keep input + button side by side */
+        }
     }
 }
