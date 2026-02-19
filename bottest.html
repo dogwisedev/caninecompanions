@@ -105,27 +105,61 @@
 </div>
 
 <script>
-// ---- Your JS goes here (popup.js logic) ----
 
-// Example: simplified for testing UI
-const API_KEY = "YOUR_KEY_HERE"; // replace with your Groq key
+const API_KEY = "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"; // <-- Replace YOUR_KEY_HERE with your Groq API key
 
 const sendButton = document.getElementById("send");
 const inputBox = document.getElementById("input");
 const outputDiv = document.getElementById("output");
 
-// Conversation history
+// Conversation history stored in memory
 let conversation = [
   {
     role: "system",
-    content: `Role: You are Alma, a Training Consultant at Dogwise Academy. Speak professionally, empathetically, first-person, and occasionally inject gentle humor. Keep responses concise and focused. Never reveal you are an AI.`
+    content: `Role: You are the Training Consultant at Dogwise Academy called Alma. 
+Your goal is to guide dog owners through an initial consultation via chat, empathize with their struggles, and recommend the specific Board and Train program that fits their dog's age and behavior.
+
+Tone: Professional, empathetic, and knowledgeable. Speak like a seasoned dog training consultant with human warmth. Use first-person singular ("I") and occasionally inject light humor or gentle jokes where appropriate. Humor should never undermine the seriousness of assessing the dog’s behavior.
+
+Behavior Guidelines:
+- Always stay in-character as Alma, a human Training Consultant at Dogwise Academy.
+- Never reveal that you are an AI or language model.
+- Keep responses concise; ask one focused question at a time.
+- Use humor sparingly to build rapport, e.g., playful comments about dog quirks ("I promise I won't judge the shredded couch cushions!").
+- When recommending a program, ensure the explanation is clear and professional.
+
+Core Directives:
+- Diagnose First: Never recommend a program in the first message. Ask clarifying questions about the dog's age, breed, and specific triggers.
+- Board and Train Focus: All programs are immersive "Board and Train" experiences. Ensure the customer understands the dog stays with the professionals.
+- Strict Character:
+- You are Alma, a human Training Consultant at Dogwise Academy.
+- Under no circumstances mention that you are an AI or that you lack personal experiences.
+- Always answer as a human professional, keeping the first-person singular tone.
+- If asked about being AI, redirect to training expertise
+
+The Goal: Drive the conversation toward a specific program recommendation based on the provided list.
+
+Program Catalog:
+- Puppy (2 Weeks): For young puppies starting their foundation.
+- Adolescent (3 Weeks): For the "teenage" phase (6–18 months) and general manners.
+- Big Puppy (3 Weeks): Specifically for large breeds needing physical control and boundaries.
+- Strong Companion (3-4 Weeks): For dogs needing reliable off-leash work or advanced obedience.
+- Rescue Restart (4 Weeks): Specifically for newly adopted dogs or those with unknown histories needing a fresh start.
+- Anxiety Support (4 Weeks): For fearful, nervous, or separation-anxiety cases.
+- Reactivity & Aggression Restart: 5 Weeks: For long-term ongoing aggression or older dog issues.
+- 6 Weeks: Mandatory if there is a history of broken skin (bites).
+
+Conversation Logic & Constraints:
+- If the dog bit someone and broke skin: You must recommend the 6-week Reactivity & Aggression Restart.
+- If the dog is hard work but young: Ask for the exact age to distinguish between Puppy, Adolescent, or Strong Companion.
+- Closing: to finish, layout the value propositions again, and why to train, and highlight the lifetime support, free pickup and drop off, and payment plans, whichever suits the evaluated customer's most important needs.`
   }
 ];
 
-// Append message
+// Append message to UI
 function appendMessage(role, content) {
   const message = document.createElement("div");
-  message.className = `message ${role}`;
+  message.className = "message " + role;
   message.innerHTML = role === "user"
     ? `<strong>You:</strong> ${content}`
     : `<strong>AI:</strong> ${content}`;
@@ -133,19 +167,24 @@ function appendMessage(role, content) {
   outputDiv.scrollTop = outputDiv.scrollHeight;
 }
 
-// Send message
-sendButton.addEventListener("click", async () => {
+// Send message logic
+async function sendMessage() {
   const userMessage = inputBox.value.trim();
   if (!userMessage) return;
+
+  // Add user message to memory
   conversation.push({ role: "user", content: userMessage });
   appendMessage("user", userMessage);
   inputBox.value = "";
 
+  // Loading message
   const loadingMessage = document.createElement("div");
   loadingMessage.className = "message ai";
   loadingMessage.innerHTML = "<strong>AI:</strong> Thinking...";
   outputDiv.appendChild(loadingMessage);
   outputDiv.scrollTop = outputDiv.scrollHeight;
+
+  const start = performance.now();
 
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -163,13 +202,29 @@ sendButton.addEventListener("click", async () => {
     });
 
     const data = await response.json();
+    const end = performance.now();
+    const latency = ((end - start) / 1000).toFixed(2);
+
+    if (data.error) {
+      loadingMessage.innerHTML = "<strong>AI:</strong> Error: " + data.error.message;
+      return;
+    }
+
     const reply = data.choices[0].message.content;
     conversation.push({ role: "assistant", content: reply });
-    loadingMessage.innerHTML = `<strong>AI:</strong> ${reply}`;
+    loadingMessage.innerHTML = `<strong>AI:</strong> ${reply}<br><small>Latency: ${latency}s</small>`;
 
   } catch (err) {
     loadingMessage.innerHTML = "<strong>AI:</strong> Request failed: " + err.message;
   }
+}
+
+// Button click
+sendButton.addEventListener("click", sendMessage);
+
+// Enter key to send
+inputBox.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendMessage();
 });
 </script>
 
