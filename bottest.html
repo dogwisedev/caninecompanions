@@ -15,17 +15,17 @@
     margin: 0;
   }
 
-.chat-container {
-  width: 600px;
-  max-width: 95%;
-  height: 800px;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  overflow: hidden;
-}
+  .chat-container {
+    width: 600px;
+    max-width: 95%;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
 
   .chat-header {
     background-color: #4a90e2;
@@ -105,14 +105,14 @@
 </div>
 
 <script>
-
-const API_KEY = "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"; // <-- Replace YOUR_KEY_HERE with your Groq API key
+// ==== API KEY ====
+const API_KEY = "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"; // <-- Replace with your Groq API key
 
 const sendButton = document.getElementById("send");
 const inputBox = document.getElementById("input");
 const outputDiv = document.getElementById("output");
 
-// Conversation history stored in memory
+// ==== Conversation Memory ====
 let conversation = [
   {
     role: "system",
@@ -157,7 +157,49 @@ Conversation Logic & Constraints:
   }
 ];
 
-// Append message to UI
+// ==== Pricing/Next Date Logic via Google Sheets ====
+let pricingData = [];
+
+async function fetchPricingSheet() {
+  const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTqsBc9HZE-TeFuxcnsozkfwaMoFYkIMLbdF7Jfa_bIhsJxAcb3RpyLdomXZo-f6mWAROjiHN2fLszB/pub?gid=1146133849&single=true&output=csv";
+  const res = await fetch(url);
+  const text = await res.text();
+  const rows = parseCSV(text);
+  pricingData = rows.slice(1).map(r => ({
+    program: r[0],
+    price: r[1],
+    nextDate: r[2]
+  }));
+  console.log("📊 Pricing/Availability loaded:", pricingData);
+}
+
+function parseCSV(str) {
+  const rows = [];
+  let row = [], quote = false, cell = '';
+  for (let i = 0; i < str.length; i++) {
+    const c = str[i], next = str[i+1];
+    if (c === '"' && quote && next === '"') { cell += c; i++; continue; }
+    if (c === '"') { quote = !quote; continue; }
+    if (c === ',' && !quote) { row.push(cell); cell=''; continue; }
+    if ((c === '\n' || (c === '\r' && next === '\n')) && !quote) { row.push(cell); rows.push(row); row=[]; cell=''; if(c === '\r') i++; continue; }
+    cell += c;
+  }
+  if(cell) row.push(cell);
+  if(row.length) rows.push(row);
+  return rows;
+}
+
+function getProgramInfo(query) {
+  query = query.toLowerCase();
+  const match = pricingData.find(p => p.program.toLowerCase().includes(query));
+  if (!match) return null;
+  return `The ${match.program} program costs ${match.price} and the next start date is ${match.nextDate}.`;
+}
+
+// Load pricing sheet on startup
+fetchPricingSheet();
+
+// ==== Append Message to UI ====
 function appendMessage(role, content) {
   const message = document.createElement("div");
   message.className = "message " + role;
@@ -168,15 +210,40 @@ function appendMessage(role, content) {
   outputDiv.scrollTop = outputDiv.scrollHeight;
 }
 
-// Send message logic
+// ==== Handle Special Requests ====
+function handleSpecialRequests(userMessage) {
+  const msg = userMessage.toLowerCase();
+
+  // Price / Availability questions
+  if (msg.includes("price") || msg.includes("cost") || msg.includes("date") || msg.includes("availability")) {
+    if (msg.includes("puppy")) return getProgramInfo("puppy");
+    if (msg.includes("adolescent")) return getProgramInfo("adolescent");
+    if (msg.includes("big puppy")) return getProgramInfo("big puppy");
+    if (msg.includes("strong companion")) return getProgramInfo("strong companion");
+    if (msg.includes("rescue restart")) return getProgramInfo("rescue restart");
+    if (msg.includes("anxiety support")) return getProgramInfo("anxiety support");
+    if (msg.includes("reactivity") || msg.includes("aggression")) return getProgramInfo("reactivity & aggression restart");
+    return "Please specify which program you want pricing or next start dates for.";
+  }
+  return null;
+}
+
+// ==== Send Message ====
 async function sendMessage() {
   const userMessage = inputBox.value.trim();
   if (!userMessage) return;
 
-  // Add user message to memory
-  conversation.push({ role: "user", content: userMessage });
   appendMessage("user", userMessage);
+  conversation.push({ role: "user", content: userMessage });
   inputBox.value = "";
+
+  // Check for pricing/date requests first
+  const specialReply = handleSpecialRequests(userMessage);
+  if (specialReply) {
+    appendMessage("ai", specialReply);
+    conversation.push({ role: "assistant", content: specialReply });
+    return; // skip AI API
+  }
 
   // Loading message
   const loadingMessage = document.createElement("div");
@@ -204,7 +271,7 @@ async function sendMessage() {
 
     const data = await response.json();
     const end = performance.now();
-    const latency = ((end - start) / 1000).toFixed(2);
+    const latency = ((end - start)/1000).toFixed(2);
 
     if (data.error) {
       loadingMessage.innerHTML = "<strong>AI:</strong> Error: " + data.error.message;
@@ -215,19 +282,15 @@ async function sendMessage() {
     conversation.push({ role: "assistant", content: reply });
     loadingMessage.innerHTML = `<strong>AI:</strong> ${reply}<br><small>Latency: ${latency}s</small>`;
 
-  } catch (err) {
+  } catch(err) {
     loadingMessage.innerHTML = "<strong>AI:</strong> Request failed: " + err.message;
   }
 }
 
-// Button click
+// ==== Event Listeners ====
 sendButton.addEventListener("click", sendMessage);
+inputBox.addEventListener("keydown", e => { if(e.key === "Enter") sendMessage(); });
 
-// Enter key to send
-inputBox.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendMessage();
-});
 </script>
-
 </body>
 </html>
