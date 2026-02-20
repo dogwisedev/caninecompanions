@@ -157,35 +157,164 @@ Conversation Logic & Constraints:
   }
 ];
 
-// Append message to UI
+let dogProfile = {
+  ageMonths: null,
+  sizeCategory: null, // small | medium | large
+  behaviorFlags: [],
+  recommendedProgram: null
+};
+
+let pricingData = [];
+
+// ================= UI =================
 function appendMessage(role, content) {
   const message = document.createElement("div");
   message.className = "message " + role;
-  message.innerHTML = role === "user"
-    ? `<strong>You:</strong> ${content}`
-    : `<strong>AI:</strong> ${content}`;
+  message.innerHTML =
+    role === "user"
+      ? `<strong>You:</strong> ${content}`
+      : `<strong>Alma:</strong> ${content}`;
   outputDiv.appendChild(message);
   outputDiv.scrollTop = outputDiv.scrollHeight;
 }
 
-// Send message logic
+// ================= PRICING LOAD =================
+async function fetchPricingSheet() {
+  const url = "YOUR_GOOGLE_SHEET_CSV_URL_HERE";
+  const res = await fetch(url);
+  const text = await res.text();
+  const rows = parseCSV(text);
+
+  pricingData = rows.slice(1).map(r => ({
+    program: r[0].toLowerCase(),
+    price: r[1],
+    nextDate: r[2]
+  }));
+}
+
+function parseCSV(str) {
+  const rows = [];
+  let row = [], quote = false, cell = '';
+  for (let i = 0; i < str.length; i++) {
+    const c = str[i], next = str[i+1];
+    if (c === '"' && quote && next === '"') { cell += c; i++; continue; }
+    if (c === '"') { quote = !quote; continue; }
+    if (c === ',' && !quote) { row.push(cell); cell=''; continue; }
+    if ((c === '\n' || (c === '\r' && next === '\n')) && !quote) {
+      row.push(cell); rows.push(row); row=[]; cell='';
+      if(c === '\r') i++; continue;
+    }
+    cell += c;
+  }
+  if(cell) row.push(cell);
+  if(row.length) rows.push(row);
+  return rows;
+}
+
+function getPricing(programName) {
+  const match = pricingData.find(p =>
+    p.program.includes(programName.toLowerCase())
+  );
+  if (!match) return "";
+  return `
+
+The investment is ${match.price}, and the next available start date is ${match.nextDate}.`;
+}
+
+// ================= DATA EXTRACTION =================
+function extractStructuredData(message) {
+  const msg = message.toLowerCase();
+
+  // Age
+  const ageMatch = msg.match(/(\d+)\s*(month|months)/);
+  if (ageMatch) dogProfile.ageMonths = parseInt(ageMatch[1]);
+
+  // Size detection
+  if (msg.includes("german shepherd") || msg.includes("large") || msg.includes("big")) {
+    dogProfile.sizeCategory = "large";
+  }
+  if (msg.includes("small") || msg.includes("toy")) {
+    dogProfile.sizeCategory = "small";
+  }
+
+  // Behaviour flags
+  if (msg.includes("bite") && msg.includes("blood")) {
+    dogProfile.behaviorFlags.push("bite_broken_skin");
+  }
+  if (msg.includes("reactive")) {
+    dogProfile.behaviorFlags.push("reactive");
+  }
+  if (msg.includes("anxiety") || msg.includes("nervous")) {
+    dogProfile.behaviorFlags.push("anxiety");
+  }
+}
+
+// ================= PROGRAM ENGINE =================
+function determineProgram() {
+  const age = dogProfile.ageMonths;
+  const size = dogProfile.sizeCategory;
+  const behaviors = dogProfile.behaviorFlags;
+
+  if (behaviors.includes("bite_broken_skin")) {
+    return "6 Weeks";
+  }
+
+  if (age !== null) {
+    if (age < 6 && size !== "large") {
+      return "Puppy Basics";
+    }
+
+    if (age <= 8 && size === "large") {
+      return "Big Puppy";
+    }
+  }
+
+  if (behaviors.includes("reactive") || behaviors.includes("aggression")) {
+    return "Reactivity & Aggression Restart";
+  }
+
+  if (behaviors.includes("anxiety")) {
+    return "Anxiety Support";
+  }
+
+  return null;
+}
+
+// ================= SEND MESSAGE =================
 async function sendMessage() {
   const userMessage = inputBox.value.trim();
   if (!userMessage) return;
 
-  // Add user message to memory
-  conversation.push({ role: "user", content: userMessage });
   appendMessage("user", userMessage);
+  conversation.push({ role: "user", content: userMessage });
   inputBox.value = "";
 
-  // Loading message
+  // Extract structured info
+  extractStructuredData(userMessage);
+
+  // Determine program
+  const program = determineProgram();
+
+  if (program && !dogProfile.recommendedProgram) {
+    dogProfile.recommendedProgram = program;
+
+    const pricingText = getPricing(program);
+
+    const finalMessage = `
+Based on what you've told me, I would recommend our ${program} Board and Train program.${pricingText}
+
+Would you like me to walk you through what that includes?`;
+
+    appendMessage("assistant", finalMessage);
+    conversation.push({ role: "assistant", content: finalMessage });
+    return;
+  }
+
+  // If no program yet → use AI
   const loadingMessage = document.createElement("div");
   loadingMessage.className = "message ai";
-  loadingMessage.innerHTML = "<strong>AI:</strong> Thinking...";
+  loadingMessage.innerHTML = "<strong>Alma:</strong> Thinking...";
   outputDiv.appendChild(loadingMessage);
-  outputDiv.scrollTop = outputDiv.scrollHeight;
-
-  const start = performance.now();
 
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -197,37 +326,29 @@ async function sendMessage() {
       body: JSON.stringify({
         model: "llama-3.1-8b-instant",
         messages: conversation,
-        max_tokens: 120,
+        max_tokens: 150,
         temperature: 0.35
       })
     });
 
     const data = await response.json();
-    const end = performance.now();
-    const latency = ((end - start) / 1000).toFixed(2);
-
-    if (data.error) {
-      loadingMessage.innerHTML = "<strong>AI:</strong> Error: " + data.error.message;
-      return;
-    }
 
     const reply = data.choices[0].message.content;
     conversation.push({ role: "assistant", content: reply });
-    loadingMessage.innerHTML = `<strong>AI:</strong> ${reply}<br><small>Latency: ${latency}s</small>`;
+    loadingMessage.innerHTML = `<strong>Alma:</strong> ${reply}`;
 
   } catch (err) {
-    loadingMessage.innerHTML = "<strong>AI:</strong> Request failed: " + err.message;
+    loadingMessage.innerHTML = "<strong>Alma:</strong> Something went wrong.";
   }
 }
 
-// Button click
+// ================= INIT =================
+fetchPricingSheet();
 sendButton.addEventListener("click", sendMessage);
-
-// Enter key to send
-inputBox.addEventListener("keydown", (e) => {
+inputBox.addEventListener("keydown", e => {
   if (e.key === "Enter") sendMessage();
 });
-</script>
 
+</script>
 </body>
 </html>
