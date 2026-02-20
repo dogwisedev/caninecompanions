@@ -180,7 +180,7 @@ function appendMessage(role, content) {
 
 // ================= PRICING LOAD =================
 async function fetchPricingSheet() {
-  const url = "YOUR_GOOGLE_SHEET_CSV_URL_HERE";
+  const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTqsBc9HZE-TeFuxcnsozkfwaMoFYkIMLbdF7Jfa_bIhsJxAcb3RpyLdomXZo-f6mWAROjiHN2fLszB/pub?gid=1146133849&single=true&output=csv";
   const res = await fetch(url);
   const text = await res.text();
   const rows = parseCSV(text);
