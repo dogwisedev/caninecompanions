@@ -382,38 +382,6 @@ Would you like me to walk you through what that includes?`;
   }
 }
 
-  // If no program yet → use AI
-  const loadingMessage = document.createElement("div");
-  loadingMessage.className = "message ai";
-  loadingMessage.innerHTML = "<strong>Alma:</strong> Thinking...";
-  outputDiv.appendChild(loadingMessage);
-
-  try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
-        messages: conversation,
-        max_tokens: 150,
-        temperature: 0.35
-      })
-    });
-
-    const data = await response.json();
-
-    const reply = data.choices[0].message.content;
-    conversation.push({ role: "assistant", content: reply });
-    loadingMessage.innerHTML = `<strong>Alma:</strong> ${reply}`;
-
-  } catch (err) {
-    loadingMessage.innerHTML = "<strong>Alma:</strong> Something went wrong.";
-  }
-}
-
 // ================= INIT =================
 fetchPricingSheet();
 sendButton.addEventListener("click", sendMessage);
