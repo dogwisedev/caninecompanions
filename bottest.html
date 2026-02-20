@@ -158,11 +158,126 @@ Conversation Logic & Constraints:
 ];
 
 let dogProfile = {
+  name: null,
   ageMonths: null,
   sizeCategory: null, // small | medium | large
   behaviorFlags: [],
   recommendedProgram: null
 };
+
+let intakeStep = 0; // Tracks conversation stage
+
+async function sendMessage() {
+  const userMessage = inputBox.value.trim();
+  if (!userMessage) return;
+
+  appendMessage("user", userMessage);
+  conversation.push({ role: "user", content: userMessage });
+  inputBox.value = "";
+
+  // ---- Intake Flow ----
+  if (intakeStep === 0) {
+    dogProfile.name = userMessage.trim().split(" ")[0]; // take first word as name
+    intakeStep++;
+    const msg = `Nice to meet you and ${dogProfile.name}! How old is ${dogProfile.name} in months?`;
+    appendMessage("assistant", msg);
+    conversation.push({ role: "assistant", content: msg });
+    return;
+  }
+
+  if (intakeStep === 1) {
+    const ageMatch = userMessage.match(/\d+/);
+    if (ageMatch) {
+      dogProfile.ageMonths = parseInt(ageMatch[0]);
+      intakeStep++;
+      const msg = `Got it. What breed is ${dogProfile.name}?`;
+      appendMessage("assistant", msg);
+      conversation.push({ role: "assistant", content: msg });
+      return;
+    } else {
+      const msg = `Please tell me ${dogProfile.name}'s age in months (e.g., 6).`;
+      appendMessage("assistant", msg);
+      conversation.push({ role: "assistant", content: msg });
+      return;
+    }
+  }
+
+  if (intakeStep === 2) {
+    const breed = userMessage.toLowerCase();
+    if (breed.includes("great dane") || breed.includes("german shepherd") || breed.includes("large")) {
+      dogProfile.sizeCategory = "large";
+    } else if (breed.includes("small") || breed.includes("toy")) {
+      dogProfile.sizeCategory = "small";
+    } else {
+      dogProfile.sizeCategory = "medium";
+    }
+    intakeStep++;
+    const msg = `Thanks! Finally, are there any behaviours or challenges you'd like me to know about? (e.g., pulling, jumping, reactive, anxious)`;
+    appendMessage("assistant", msg);
+    conversation.push({ role: "assistant", content: msg });
+    return;
+  }
+
+  if (intakeStep === 3) {
+    const msgLower = userMessage.toLowerCase();
+    if (msgLower.includes("bite") && msgLower.includes("blood")) dogProfile.behaviorFlags.push("bite_broken_skin");
+    if (msgLower.includes("reactive") || msgLower.includes("aggression")) dogProfile.behaviorFlags.push("reactive");
+    if (msgLower.includes("anxiety") || msgLower.includes("nervous")) dogProfile.behaviorFlags.push("anxiety");
+
+    intakeStep++;
+    const program = determineProgram();
+    dogProfile.recommendedProgram = program;
+
+    const pricingText = getPricing(program);
+
+    const finalMsg = `
+Based on what you've told me, I would recommend our ${program} Board and Train program.${pricingText}
+
+Would you like me to walk you through what that includes?`;
+
+    appendMessage("assistant", finalMsg);
+    conversation.push({ role: "assistant", content: finalMsg });
+    return;
+  }
+
+  // ---- Post-intake AI responses ----
+  // Optional: price requests or general AI replies
+  if (dogProfile.recommendedProgram && userMessage.toLowerCase().includes("price")) {
+    const pricingText = getPricing(dogProfile.recommendedProgram);
+    appendMessage("assistant", pricingText);
+    conversation.push({ role: "assistant", content: pricingText });
+    return;
+  }
+
+  // Fallback AI
+  const loadingMessage = document.createElement("div");
+  loadingMessage.className = "message ai";
+  loadingMessage.innerHTML = "<strong>Alma:</strong> Thinking...";
+  outputDiv.appendChild(loadingMessage);
+
+  try {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "llama-3.1-8b-instant",
+        messages: conversation,
+        max_tokens: 150,
+        temperature: 0.35
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.choices[0].message.content;
+    conversation.push({ role: "assistant", content: reply });
+    loadingMessage.innerHTML = `<strong>Alma:</strong> ${reply}`;
+  } catch (err) {
+    loadingMessage.innerHTML = "<strong>Alma:</strong> Something went wrong.";
+  }
+}
 
 let pricingData = [];
 
