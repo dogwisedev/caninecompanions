@@ -157,22 +157,6 @@ Conversation Logic & Constraints:
   }
 ];
 
-const API_KEY = "YOUR_KEY_HERE"; 
-
-const sendButton = document.getElementById("send");
-const inputBox = document.getElementById("input");
-const outputDiv = document.getElementById("output");
-
-let conversation = [
-  {
-    role: "system",
-    content: `You are Alma, a human Training Consultant at Dogwise Academy. 
-    Your goal is to empathize and gather info: Dog's name, age, breed, and specific behavioral issues.
-    People often minimize issues (e.g., calling aggression 'protectiveness'). Be a detective.
-    If they mention cost being high or 'troublesome', you can offer a 10% discount to help them out.`
-  }
-];
-
 let dogProfile = {
   name: null,
   ageMonths: null,
