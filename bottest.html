@@ -251,23 +251,112 @@
 //  DOGWISE SALES BOT — V1 (Claude API, correct program logic)
 // ─────────────────────────────────────────────────────────────
 
+// ── Trainer list ────────────────────────────────────────────
+const TRAINERS = [
+  { name: "Michael Jackson",       lat: 40.7027, lon: -73.9432, city: "Brooklyn",          state: "NY" },
+  { name: "Alex Santiago",         lat: 40.7611, lon: -73.3283, city: "Deer Park",          state: "NY" },
+  { name: "Amanda Kranz",          lat: 41.5965, lon: -73.9130, city: "Wappingers Falls",   state: "NY" },
+  { name: "Mike Colt",             lat: 40.9740, lon: -75.0255, city: "Columbia",           state: "NJ" },
+  { name: "Nyeem Calhoun",         lat: 39.4515, lon: -74.7273, city: "Mays Landing",       state: "NJ" },
+  { name: "Eddie Bonilla",         lat: 42.7380, lon: -71.3780, city: "Pelham",             state: "NH" },
+  { name: "Drew Thompson",         lat: 41.2174, lon: -73.2165, city: "Bridgeport",         state: "CT" },
+  { name: "Jen Hagarman",          lat: 39.7957, lon: -76.9811, city: "Hanover",            state: "PA" },
+  { name: "David Lewis",           lat: 38.7493, lon: -76.6083, city: "Dunkirk",            state: "MD" },
+  { name: "Diamond Warren",        lat: 39.2904, lon: -76.6122, city: "Baltimore",          state: "MD" },
+  { name: "Shelby Fleming",        lat: 38.8520, lon: -76.6224, city: "Harwood",            state: "MD" },
+  { name: "April Crawford",        lat: 36.7123, lon: -76.2441, city: "Chesapeake",         state: "VA" },
+  { name: "Jason Lewis",           lat: 34.2668, lon: -80.8436, city: "Ridgeway",           state: "SC" },
+  { name: "Theresa Strickland",    lat: 34.0371, lon: -84.4233, city: "Roswell",            state: "GA" },
+  { name: "Opal O'Brien",          lat: 33.7850, lon: -84.0730, city: "Stone Mountain",     state: "GA" },
+  { name: "Jarret Price",          lat: 32.5520, lon: -83.6970, city: "Kathleen",           state: "GA" },
+  { name: "Allie Lopez",           lat: 34.0537, lon: -84.0725, city: "Suwanee",            state: "GA" },
+  { name: "Rina Sullivan",         lat: 27.9358, lon: -80.6595, city: "Grant-Valkaria",     state: "FL" },
+  { name: "Tammy Leatherwood",     lat: 28.9517, lon: -81.3031, city: "Orange City",        state: "FL" },
+  { name: "James Guillory",        lat: 28.1472, lon: -82.5716, city: "Odessa",             state: "FL" },
+  { name: "Tracie Dulniak",        lat: 26.0926, lon: -80.1623, city: "Fort Lauderdale",    state: "FL" },
+  { name: "Melina Molinare",       lat: 25.7530, lon: -80.2350, city: "Miami",              state: "FL" },
+  { name: "Bailey Preston",        lat: 42.6398, lon: -83.3499, city: "Waterford Township", state: "MI" },
+  { name: "Nicole Murray",         lat: 39.8120, lon: -86.1770, city: "Indianapolis",       state: "IN" },
+  { name: "Jonathon Glenn",        lat: 39.8350, lon: -86.0550, city: "Indianapolis",       state: "IN" },
+  { name: "Brandon Edmonds",       lat: 41.7620, lon: -87.5640, city: "Chicago",            state: "IL" },
+  { name: "Cedric Coleman",        lat: 41.2675, lon: -88.2189, city: "Braidwood",          state: "IL" },
+  { name: "Wildon Bloodworth",     lat: 30.1869, lon: -97.9514, city: "Austin",             state: "TX" },
+  { name: "Cassandra Anderson",    lat: 30.1170, lon: -94.1922, city: "Beaumont",           state: "TX" },
+  { name: "Joi Martin",            lat: 29.6873, lon: -95.2544, city: "Houston",            state: "TX" },
+  { name: "Felicity Houston",      lat: 33.2546, lon: -97.0903, city: "Denton",             state: "TX" },
+  { name: "Ashlyn Rechtiene",      lat: 39.5028, lon:-104.7670, city: "Parker",             state: "CO" },
+  { name: "Jerry Self",            lat: 33.5683, lon:-112.3090, city: "Peoria",             state: "AZ" },
+  { name: "Njoud Aghabi",          lat: 33.7570, lon:-118.1350, city: "Long Beach",         state: "CA" },
+  { name: "Ryan Chudacoff",        lat: 34.4140, lon:-117.5020, city: "Phelan",             state: "CA" },
+  { name: "Priscilla Rodriguez",   lat: 33.9401, lon:-118.1332, city: "Downey",             state: "CA" },
+  { name: "Jessica Walsh",         lat: 35.1340, lon:-117.9770, city: "California City",    state: "CA" },
+  { name: "Joseph Serrano",        lat: 36.1464, lon:-118.7595, city: "Springville",        state: "CA" },
+  { name: "Olivia Sheehan",        lat: 37.7320, lon:-121.4300, city: "Tracy",              state: "CA" },
+  { name: "Karen Arguello",        lat: 38.6810, lon:-120.8430, city: "El Dorado",          state: "CA" },
+  { name: "Heather Truax",         lat: 47.7440, lon:-122.3450, city: "Shoreline",          state: "WA" },
+  { name: "Jordan Williams",       lat: 41.4060, lon: -81.5550, city: "Maple Heights",      state: "OH" },
+  { name: "Ava Santana",           lat: 42.5036, lon: -72.3121, city: "New Salem",          state: "MA" },
+];
+
+const PREMIUM_STATES = ["AZ","CA","CT","FL","MA","NJ","NY","WA"];
+
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 3958.8, toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+const zipCache = {};
+async function zipToCoords(zip) {
+  if (zipCache[zip]) return zipCache[zip];
+  try {
+    const r = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (!d.places?.[0]) return null;
+    const result = { lat: parseFloat(d.places[0].latitude), lon: parseFloat(d.places[0].longitude), city: d.places[0]["place name"], state: d.places[0]["state abbreviation"] };
+    zipCache[zip] = result;
+    return result;
+  } catch { return null; }
+}
+
+function closestTrainer(userLat, userLon) {
+  let best = null, bestDist = Infinity;
+  for (const t of TRAINERS) {
+    const d = haversine(userLat, userLon, t.lat, t.lon);
+    if (d < bestDist) { bestDist = d; best = t; }
+  }
+  return best ? { ...best, distanceMiles: Math.round(bestDist) } : null;
+}
+
+function getPricingContext(rec, stateAbb) {
+  if (!rec) return "Programs range from $2,000 for a 2-week puppy program up to $8,000 for an 8-week intensive. The right number depends on what your dog needs — once I know more, I can give you an exact figure.";
+  const isPremium = stateAbb && PREMIUM_STATES.includes(stateAbb);
+  const price = (rec.weeks * 1000 * (isPremium ? 1.1 : 1.0)).toLocaleString();
+  return `The ${rec.program} (${rec.weeks} weeks) is $${price}${isPremium ? " (premium market rate)" : ""}. There's a $1,000 deposit to hold the spot, and payment plans are available.`;
+}
+
 // ── Dog profile ──────────────────────────────────────────────
 const profile = {
-  ageMonths:     null,   // number
-  isLargeBreed:  null,   // bool
-  breed:         null,   // string
-  hasAggression: false,
-  biteHistory:   false,
-  skinBroken:    false,
-  excitementBite:false,  // young dog, accidental, pointy teeth
-  hasAnxiety:    false,
-  realAnxiety:   null,   // null = unconfirmed, true/false after sift
-  isRescue:      false,
-  rescueRestart: null,   // true = unknown bg + shut down; false = just rescue but normal
-  hasObedience:  false,  // dog already has basics, needs real-world control
-  requestedUnsupported: null, // "offleash" | "protection" | "service"
-  conversationStage: "rapport", // rapport → discovery → recommendation → close
-  questionsAsked: [],
+  ageMonths:      null,
+  isLargeBreed:   null,
+  breed:          null,
+  hasAggression:  false,
+  biteHistory:    false,
+  skinBroken:     false,
+  excitementBite: false,
+  hasAnxiety:     false,
+  realAnxiety:    null,
+  isRescue:       false,
+  rescueRestart:  null,
+  hasObedience:   false,
+  requestedUnsupported: null,
+  zip:            null,
+  userCity:       null,
+  userState:      null,
+  closestTrainer: null,
+  conversationStage: "rapport",
   readyToRecommend: false,
 };
 
@@ -339,6 +428,10 @@ function getRecommendation() {
 // ── System prompt ────────────────────────────────────────────
 function buildSystemPrompt() {
   const rec = getRecommendation();
+  const pricing = getPricingContext(rec, profile.userState);
+  const trainerInfo = profile.closestTrainer
+    ? `Closest trainer: ${profile.closestTrainer.name} in ${profile.closestTrainer.city}, ${profile.closestTrainer.state} (${profile.closestTrainer.distanceMiles} miles away). Use this when they ask where we are or who would train their dog.`
+    : `Customer location unknown. If they ask where we are, ask for their ZIP so you can tell them the closest trainer.`;
   const profileJson = JSON.stringify({...profile, _recommendation: rec}, null, 2);
 
   return `You are Alma, a Training Consultant at Dogwise Academy. You are having a text conversation with a potential client.
@@ -381,6 +474,18 @@ ANXIETY SIFT
 - "Anxious" is overused. Before recommending Anxiety Support, confirm:
   - Does the dog panic when left alone? Tremble at storms? Unable to settle?
   - NOT: new house for 1 day, dislikes the crate, barks at strangers, timid dog
+
+LOCATION & TRAINER QUESTIONS
+${trainerInfo}
+- If they ask where we are or who their trainer is: answer with closest trainer city/state only — not personal address.
+- We are a network of home-based trainers. The dog lives with the trainer during the program.
+- If location unknown: "What's your ZIP? I can tell you which of our trainers is closest to you."
+
+PRICING QUESTIONS
+${pricing}
+- Before recommendation: give the range ($2,000–$8,000), explain it depends on dog needs, redirect: "Once I understand [dog] better I can give you an exact number."
+- After recommendation: give the specific price above.
+- NEVER volunteer price or discounts unprompted. Payment plans available.
 
 PROGRAMS WE OFFER
 - Puppy Foundations (2 wks): 0–6 months, small/medium breeds
@@ -480,13 +585,16 @@ async function extractProfile(userMessage) {
   "excitementBite": boolean,
   "hasAnxiety": boolean,
   "isRescue": boolean,
-  "hasObedience": boolean
+  "hasObedience": boolean,
+  "zip": string or null,
+  "cityMentioned": string or null
 }
 
-Large breeds include: Rottweiler, Pitbull, German Shepherd, Mastiff, Great Dane, Doberman, Cane Corso, Bullmastiff, Bernese, Saint Bernard, Labrador (if large), Weimaraner, Ridgeback. 
-Age clues: "puppy"=~3mo, "8 weeks"=2mo, "6 months"=6mo, "1 year"=12mo, "2 years"=24mo.
-Excitement bite: young dog, bite described as accident/play/excited, no history of aggression.
-Return ONLY the JSON object, no explanation.`,
+Large breeds: Rottweiler, Pitbull, GSD, Mastiff, Great Dane, Doberman, Cane Corso, Bullmastiff, Bernese, Saint Bernard, Weimaraner, Ridgeback, Dogo Argentino.
+Age clues: "puppy"=3mo, "8 weeks"=2, "4 months"=4, "6 months"=6, "1 year"=12, "18 months"=18, "2 years"=24, "3 years"=36, "4 years"=48.
+excitementBite=true only if young + described as accidental/play + no aggression pattern.
+Also extract: "zip" (5-digit US ZIP if mentioned), "cityMentioned" (city name if mentioned).
+Return ONLY valid JSON with all original fields plus zip and cityMentioned. No explanation.`,
         messages: [{ role: "user", content: userMessage }]
       })
     });
@@ -534,31 +642,37 @@ async function send() {
 
   showTyping();
 
-  // Run profile extraction in parallel with reply generation
-  const [extracted, reply] = await Promise.all([
-    extractProfile(text),
-    (async () => {
-      // Small delay so profile extraction finishes before system prompt is built
-      await new Promise(r => setTimeout(r, 100));
-      return getAlmaReply();
-    })()
-  ]);
+  // Extract profile first so system prompt has fresh data
+  const extracted = await extractProfile(text);
 
   // Merge extracted profile
   if (extracted) {
-    if (extracted.ageMonths !== null && extracted.ageMonths !== undefined) profile.ageMonths = extracted.ageMonths;
-    if (extracted.isLargeBreed !== null) profile.isLargeBreed = extracted.isLargeBreed;
-    if (extracted.breed) profile.breed = extracted.breed;
-    if (extracted.hasAggression) profile.hasAggression = true;
-    if (extracted.biteHistory)   profile.biteHistory = true;
-    if (extracted.skinBroken)    profile.skinBroken = true;
-    if (extracted.excitementBite) profile.excitementBite = true;
-    if (extracted.hasAnxiety)    profile.hasAnxiety = true;
-    if (extracted.isRescue)      profile.isRescue = true;
-    if (extracted.hasObedience)  profile.hasObedience = true;
+    if (extracted.ageMonths != null)    profile.ageMonths    = extracted.ageMonths;
+    if (extracted.isLargeBreed != null) profile.isLargeBreed = extracted.isLargeBreed;
+    if (extracted.breed)                profile.breed        = extracted.breed;
+    if (extracted.hasAggression)        profile.hasAggression  = true;
+    if (extracted.biteHistory)          profile.biteHistory    = true;
+    if (extracted.skinBroken)           profile.skinBroken     = true;
+    if (extracted.excitementBite)       profile.excitementBite = true;
+    if (extracted.hasAnxiety)           profile.hasAnxiety     = true;
+    if (extracted.isRescue)             profile.isRescue       = true;
+    if (extracted.hasObedience)         profile.hasObedience   = true;
+    // Location resolution
+    if (extracted.zip && extracted.zip !== profile.zip) {
+      profile.zip = extracted.zip;
+      zipToCoords(extracted.zip).then(coords => {
+        if (coords) {
+          profile.userCity  = coords.city;
+          profile.userState = coords.state;
+          profile.closestTrainer = closestTrainer(coords.lat, coords.lon);
+          log("Trainer: " + JSON.stringify(profile.closestTrainer));
+        }
+      });
+    }
     log("Profile: " + JSON.stringify(profile));
   }
 
+  const reply = await getAlmaReply();
   hideTyping();
   addBubble("alma", reply);
   history.push({ role: "assistant", content: reply });
