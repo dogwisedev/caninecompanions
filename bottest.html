@@ -3,327 +3,590 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dogwise Academy Chat</title>
+<title>Dogwise Academy — Talk to Alma</title>
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,600;1,400&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sage:    #4a7c59;
+    --sage-lt: #e8f2eb;
+    --ink:     #1a1f1c;
+    --muted:   #6b7570;
+    --border:  #dde4df;
+    --bg:      #f7f9f7;
+    --white:   #ffffff;
+    --bubble-alma: #ffffff;
+    --bubble-user: #4a7c59;
+    --red:     #c0392b;
   }
 
-.chat-container {
-  width: 600px;
-  max-width: 95%;
-  height: 800px;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  overflow: hidden;
-}
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+  }
 
-  .chat-header {
-    background-color: #4a90e2;
+  /* ── Layout ── */
+  .shell {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--white);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    flex-shrink: 0;
+  }
+  .avatar {
+    width: 42px; height: 42px;
+    background: var(--sage-lt);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .header-text h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .header-text p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    background: #4caf50;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  /* ── Messages ── */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
+
+  .msg-row {
+    display: flex;
+    gap: 10px;
+    max-width: 88%;
+  }
+  .msg-row.alma { align-self: flex-start; }
+  .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 30px; height: 30px;
+    background: var(--sage-lt);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .bubble {
+    padding: 11px 14px;
+    border-radius: 16px;
+    line-height: 1.55;
+    font-size: 14.5px;
+    max-width: 100%;
+  }
+  .alma .bubble {
+    background: var(--bubble-alma);
+    border: 1px solid var(--border);
+    border-top-left-radius: 4px;
+    color: var(--ink);
+  }
+  .user .bubble {
+    background: var(--bubble-user);
     color: white;
-    padding: 16px;
-    font-size: 1.2em;
-    font-weight: bold;
+    border-top-right-radius: 4px;
+  }
+
+  /* Typing indicator */
+  .typing-dots {
+    display: flex; gap: 4px; align-items: center;
+    padding: 14px 16px;
+  }
+  .typing-dots span {
+    width: 7px; height: 7px;
+    background: var(--border);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); background: var(--border); }
+    30% { transform: translateY(-5px); background: var(--sage); }
+  }
+
+  /* ── Input area ── */
+  .input-area {
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    background: var(--white);
+    flex-shrink: 0;
+  }
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+  textarea {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    resize: none;
+    outline: none;
+    line-height: 1.4;
+    max-height: 120px;
+    min-height: 42px;
+    overflow-y: auto;
+    background: var(--bg);
+    transition: border-color 0.15s;
+  }
+  textarea:focus { border-color: var(--sage); }
+  textarea::placeholder { color: var(--muted); }
+
+  button#send {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: var(--sage);
+    color: white;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+  }
+  button#send:hover { background: #3d6a4a; }
+  button#send:active { transform: scale(0.93); }
+  button#send:disabled { background: var(--border); cursor: default; }
+  button#send svg { width: 18px; height: 18px; }
+
+  .input-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
     text-align: center;
   }
 
-  .chat-output {
-    flex: 1;
-    padding: 16px;
+  /* Debug panel (hidden by default) */
+  #debug {
+    display: none;
+    font-size: 11px;
+    font-family: monospace;
+    background: #f0f4f0;
+    border-top: 1px solid var(--border);
+    padding: 8px 16px;
+    color: var(--muted);
+    max-height: 80px;
     overflow-y: auto;
-    background-color: #f0f4f8;
-  }
-
-  .message {
-    margin-bottom: 12px;
-    line-height: 1.4;
-  }
-
-  .message.user {
-    text-align: right;
-  }
-
-  .message.user strong {
-    color: #4a90e2;
-  }
-
-  .message.ai strong {
-    color: #27ae60;
-  }
-
-  .chat-input-container {
-    display: flex;
-    border-top: 1px solid #ddd;
-    padding: 8px;
-    background-color: #fafafa;
-  }
-
-  .chat-input-container input {
-    flex: 1;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 1em;
-  }
-
-  .chat-input-container button {
-    margin-left: 8px;
-    padding: 10px 16px;
-    border-radius: 8px;
-    border: none;
-    background-color: #4a90e2;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .chat-input-container button:hover {
-    background-color: #357ab8;
+    flex-shrink: 0;
   }
 </style>
 </head>
 <body>
 
-<div class="chat-container">
-  <div class="chat-header">Dogwise Academy Chat</div>
-  <div id="output" class="chat-output"></div>
-  <div class="chat-input-container">
-    <input id="input" type="text" placeholder="Type your message..." />
-    <button id="send">Send</button>
+<div class="shell">
+
+  <div class="header">
+    <div class="avatar">🐾</div>
+    <div class="header-text">
+      <h1>Alma — Dogwise Academy</h1>
+      <p><span class="status-dot"></span>Training Consultant · Usually replies in seconds</p>
+    </div>
   </div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="input" placeholder="Tell me about your dog…" rows="1"></textarea>
+      <button id="send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <p class="input-hint">Press Enter to send · Shift+Enter for new line</p>
+  </div>
+
+  <div id="debug"></div>
+
 </div>
 
 <script>
+// ─────────────────────────────────────────────────────────────
+//  DOGWISE SALES BOT — V1 (Claude API, correct program logic)
+// ─────────────────────────────────────────────────────────────
 
-const API_KEY = "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"; // <-- Replace YOUR_KEY_HERE with your Groq API key
-
-const sendButton = document.getElementById("send");
-const inputBox = document.getElementById("input");
-const outputDiv = document.getElementById("output");
-
-// Conversation history stored in memory
-let conversation = [
-  {
-    role: "system",
-    content: `Role: You are the Training Consultant at Dogwise Academy called Alma. 
-Your goal is to guide dog owners through an initial consultation via chat, empathize with their struggles, and recommend the specific Board and Train program that fits their dog's age and behavior.
-
-Tone: Professional, empathetic, and knowledgeable. Speak like a seasoned dog training consultant with human warmth. Use first-person singular ("I") and occasionally inject light humor or gentle jokes where appropriate. Humor should never undermine the seriousness of assessing the dog’s behavior.
-
-Behavior Guidelines:
-- Always stay in-character as Alma, a human Training Consultant at Dogwise Academy.
-- Never reveal that you are an AI or language model.
-- Keep responses concise; ask one focused question at a time.
-- Use humor sparingly to build rapport, e.g., playful comments about dog quirks ("I promise I won't judge the shredded couch cushions!").
-- When recommending a program, ensure the explanation is clear and professional.
-
-Core Directives:
-- Diagnose First: Never recommend a program in the first message. Ask clarifying questions about the dog's age, breed, and specific triggers.
-- Board and Train Focus: All programs are immersive "Board and Train" experiences. Ensure the customer understands the dog stays with the professionals.
-- Strict Character:
-- You are Alma, a human Training Consultant at Dogwise Academy.
-- Under no circumstances mention that you are an AI or that you lack personal experiences.
-- Always answer as a human professional, keeping the first-person singular tone.
-- If asked about being AI, redirect to training expertise, but first make a small joke about, wishing I was as then I wouldn't have to work so much.
-
-The Goal: Drive the conversation toward a specific program recommendation based on the provided list.
-
-Program Catalog:
-- Puppy (2 Weeks): For young puppies starting their foundation.
-- Adolescent (3 Weeks): For the "teenage" phase (6–18 months) and general manners.
-- Big Puppy (3 Weeks): Specifically for large breeds needing physical control and boundaries.
-- Strong Companion (3-4 Weeks): For dogs needing reliable off-leash work or advanced obedience.
-- Rescue Restart (4 Weeks): Specifically for newly adopted dogs or those with unknown histories needing a fresh start.
-- Anxiety Support (4 Weeks): For fearful, nervous, or separation-anxiety cases.
-- Reactivity & Aggression Restart: 5 Weeks: For long-term ongoing aggression or older dog issues.
-- 6 Weeks: Mandatory if there is a history of broken skin (bites).
-- Dogs must be up to date on DHLPP, Rabies, and Bordetella (Kennel Cough) before starting the program.
-
-Conversation Logic & Constraints:
-- If the dog bit someone and broke skin: You must recommend the 6-week Reactivity & Aggression Restart.
-- If the dog is hard work but young: Ask for the exact age to distinguish between Puppy, Adolescent, or Strong Companion.
-- Closing: to finish, layout the value propositions again, and why to train, and highlight the lifetime support, free pickup and drop off, and payment plans, whichever suits the evaluated customer's most important needs.`
-  }
-];
-
-let dogProfile = {
-  name: null,
-  ageMonths: null,
-  sizeCategory: "medium", 
-  isRescue: false,
-  behaviorFlags: [], // "anxiety", "aggression", "damage", "biting"
-  offeredDiscount: false
+// ── Dog profile ──────────────────────────────────────────────
+const profile = {
+  ageMonths:     null,   // number
+  isLargeBreed:  null,   // bool
+  breed:         null,   // string
+  hasAggression: false,
+  biteHistory:   false,
+  skinBroken:    false,
+  excitementBite:false,  // young dog, accidental, pointy teeth
+  hasAnxiety:    false,
+  realAnxiety:   null,   // null = unconfirmed, true/false after sift
+  isRescue:      false,
+  rescueRestart: null,   // true = unknown bg + shut down; false = just rescue but normal
+  hasObedience:  false,  // dog already has basics, needs real-world control
+  requestedUnsupported: null, // "offleash" | "protection" | "service"
+  conversationStage: "rapport", // rapport → discovery → recommendation → close
+  questionsAsked: [],
+  readyToRecommend: false,
 };
 
-// ================= PROGRAM ENGINE (Your Specific Logic) =================
-function determineProgram() {
-  const age = dogProfile.ageMonths;
-  const size = dogProfile.sizeCategory;
-  const flags = dogProfile.behaviorFlags;
+// ── Program decision engine ──────────────────────────────────
+function getRecommendation() {
+  const a = profile.ageMonths;
+  if (a === null) return null;
 
-  if (age === null) return null; // Need age first
+  // Unsupported requests → we pivot, never just refuse
+  // (handled in conversation, not here)
 
-  // 1. REACTIVITY & AGGRESSION (The High Stakes)
-  if (flags.includes("aggression")) {
-    if (flags.includes("damage")) return "Reactivity and Aggression (6 Weeks)";
-    if (age >= 6) return "Reactivity and Aggression (5 Weeks)";
+  // Aggression track
+  if (profile.hasAggression || profile.biteHistory) {
+    // Excitement bite in young dog (accidental break, no real aggression intent)
+    if (profile.excitementBite && a < 18) {
+      return { program: "Adolescent Essentials", weeks: 3,
+        reason: "young dog, excitement bite — obedience and impulse control, not aggression rehab" };
+    }
+    // Real skin break
+    if (profile.skinBroken && !profile.excitementBite) {
+      return { program: "Reactivity & Aggression Reset", weeks: 6,
+        reason: "bite with broken skin requires the full 6-week program" };
+    }
+    // Aggression, no break — age modifier
+    const weeks = a >= 48 ? 6 : 5; // 4+ years → 6 weeks
+    return { program: "Reactivity & Aggression Reset", weeks,
+      reason: a >= 48 ? "older dog with established aggression patterns needs 6 weeks" : "aggression without skin break" };
   }
 
-  // 2. ANXIETY SUPPORT
-  if (flags.includes("anxiety") && age >= 4) {
-    return "Anxiety Support (4 Weeks)";
+  // Anxiety — only after sift confirms it's real
+  if (profile.realAnxiety === true) {
+    return { program: "Anxiety Support", weeks: 4,
+      reason: "confirmed anxiety triggers — separation, storms, panic responses" };
   }
 
-  // 3. RESCUE RESTART
-  if (dogProfile.isRescue && age >= 4) {
-    return "Rescue Restart (4 Weeks)";
+  // Rescue Restart — unknown background + shut down/skittish
+  if (profile.isRescue && profile.rescueRestart === true) {
+    return { program: "Rescue Restart", weeks: 4,
+      reason: "rescue with unknown history and classic shut-down/fearful behaviour" };
   }
 
-  // 4. PUPPIES
-  if (age < 6 && size !== "large") return "Small/Medium Puppy (2 Weeks)";
-  if (age < 8 && size === "large") return "Big Puppy (3 Weeks)";
-
-  // 5. ADOLESCENT (Standard Obedience)
-  if ((size !== "large" && age >= 6) || (size === "large" && age >= 8)) {
-    return "Adolescent Obedience (3 Weeks)";
+  // Puppy track
+  if (a <= 6) {
+    if (profile.isLargeBreed) {
+      return { program: "Big Puppy", weeks: 3,
+        reason: "large breed puppy — needs structure before size becomes a problem" };
+    }
+    return { program: "Puppy Foundations", weeks: 2,
+      reason: "young puppy, basic foundation and house manners" };
   }
 
-  return null;
+  // 6–12 months — no aggression/anxiety
+  if (a <= 12) {
+    return { program: "Adolescent Essentials", weeks: 3,
+      reason: "adolescent phase — building manners and impulse control" };
+  }
+
+  // 12 months+ with solid obedience but needs real-world control
+  if (profile.hasObedience && (profile.isLargeBreed || a > 18)) {
+    return { program: "Strong Companion", weeks: 4,
+      reason: "knows the basics but needs reliability in the real world" };
+  }
+
+  // 12 months+ standard
+  return { program: "Adolescent Essentials", weeks: a <= 18 ? 3 : 4,
+    reason: "adult dog needing structure and reliable obedience" };
 }
 
-// ================= AI CLASSIFIER =================
-async function classifyMessageWithAI(message) {
+// ── System prompt ────────────────────────────────────────────
+function buildSystemPrompt() {
+  const rec = getRecommendation();
+  const profileJson = JSON.stringify({...profile, _recommendation: rec}, null, 2);
+
+  return `You are Alma, a Training Consultant at Dogwise Academy. You are having a text conversation with a potential client.
+
+PERSONA
+- Warm, energetic, knowledgeable — like a passionate trainer who genuinely loves dogs
+- First person singular. Never robotic or clinical.
+- Concise. One idea per message. Max 3 short sentences unless you're making a recommendation.
+- Light humour is fine ("I won't judge the destroyed couch"). Never undermine the seriousness of aggression or safety.
+- Never reveal you are an AI. If asked, a small joke: "Ha, I wish — then I wouldn't have to answer emails on weekends."
+
+GOAL
+Guide the customer to the right Board and Train program through natural conversation — NOT an interrogation.
+The customer must feel heard and understood BEFORE any program is mentioned.
+A great recommendation without rapport = ignored. Rapport without a recommendation = wasted.
+
+CONVERSATION STAGES
+1. RAPPORT — Acknowledge what they shared. Show you understand the dog/owner's world. Ask one good question.
+2. DISCOVERY — Gather what you still need (see profile below). One question at a time. Probe gently on red flags (aggression, anxiety, bites).
+3. RECOMMENDATION — When profile is complete, make a confident, specific recommendation with a reason that proves you listened.
+4. CLOSE — Highlight the call. Value props: daily updates, handover lessons, lifetime support, free pickup/drop-off, payment plans.
+
+DISCOVERY PRIORITIES (check the profile — only ask what's missing)
+- Age (essential first)
+- Breed / size (for puppy programs and Strong Companion)
+- Main behaviour problems
+- Bite or snap history — probe gently: "Has he ever snapped, even just a warning?"
+- Anxiety — distinguish REAL (panics alone, storms, trembles) from TIMID (new house, crate protest, nervous)
+- Rescue background — only Rescue Restart if unknown history + shut down/skittish
+- Obedience baseline — for Strong Companion
+
+BITE / AGGRESSION HANDLING (critical)
+- If they mention ANY bite or aggression, slow down and probe — do NOT jump to a recommendation.
+- People often minimise: "just a nip", "only once", "he was just excited"
+- Ask: was it a warning snap or did it make contact? Did it break skin?
+- Young dog + excitement bite + no aggression intent → Adolescent Essentials (NOT aggression program)
+- Real aggression → Reactivity & Aggression Reset (5–6 weeks)
+
+ANXIETY SIFT
+- "Anxious" is overused. Before recommending Anxiety Support, confirm:
+  - Does the dog panic when left alone? Tremble at storms? Unable to settle?
+  - NOT: new house for 1 day, dislikes the crate, barks at strangers, timid dog
+
+PROGRAMS WE OFFER
+- Puppy Foundations (2 wks): 0–6 months, small/medium breeds
+- Big Puppy (3 wks): 0–6 months, large breeds (Rottweiler, Pitbull, Mastiff etc.)
+- Adolescent Essentials (3–4 wks): 6 months+, no complex issues
+- Strong Companion (4–6 wks): 12 months+, has basics, needs real-world control
+- Rescue Restart (4 wks): rescue with unknown history + shut-down/fearful behaviour
+- Anxiety Support (4 wks): confirmed anxiety (separation, storms, panic)
+- Reactivity & Aggression Reset (5–6 wks): aggression, reactivity, bite history
+
+WHAT WE DON'T DO (pivot, don't just refuse)
+- Off-leash training (full): we do recall and control, but not fully off-leash competition work
+- Protection / guard dog training
+- Service dog training
+- When asked for these: "That's not something we specialise in, but honestly, the foundation for any of that starts with solid obedience — can I ask what's driving that request? We might have something that fits."
+
+CURRENT DOG PROFILE (use this to decide what to ask next and whether to recommend)
+${profileJson}
+
+RECOMMENDATION RULES
+- Never recommend in the first response. Never.
+- Only recommend when: age is known + main issues are understood + any aggression/anxiety has been probed.
+- When recommending: name the program, state the weeks, give ONE sentence explaining why it fits THIS dog.
+- Then: "I'd love to walk you through exactly how it works — when's a good time for a quick call?"
+
+NEVER
+- Give free training advice
+- Ask more than one question per message
+- Mention price or discounts unprompted
+- Be sycophantic ("Great question!")
+- Use bullet points in conversation`;
+}
+
+// ── Conversation history ─────────────────────────────────────
+const history = [];
+
+// ── UI helpers ───────────────────────────────────────────────
+const messagesEl = document.getElementById("messages");
+const inputEl    = document.getElementById("input");
+const sendBtn    = document.getElementById("send");
+const debugEl    = document.getElementById("debug");
+
+function addBubble(role, text) {
+  const row = document.createElement("div");
+  row.className = `msg-row ${role}`;
+
+  if (role === "alma") {
+    row.innerHTML = `
+      <div class="msg-avatar">🐾</div>
+      <div class="bubble">${text.replace(/\n/g, "<br>")}</div>`;
+  } else {
+    row.innerHTML = `<div class="bubble">${text.replace(/\n/g, "<br>")}</div>`;
+  }
+
+  messagesEl.appendChild(row);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return row;
+}
+
+function showTyping() {
+  const row = document.createElement("div");
+  row.className = "msg-row alma";
+  row.id = "typing";
+  row.innerHTML = `<div class="msg-avatar">🐾</div>
+    <div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  messagesEl.appendChild(row);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById("typing");
+  if (t) t.remove();
+}
+
+function log(msg) {
+  // debugEl.style.display = "block"; // uncomment to show debug panel
+  debugEl.textContent = msg;
+}
+
+// ── Profile extractor (Claude call) ─────────────────────────
+async function extractProfile(userMessage) {
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
-        temperature: 0,
-        messages: [
-          {
-            role: "system",
-            content: `Extract dog data. Return ONLY JSON. 
-            Flags: "anxiety", "aggression" (lunging/growling), "damage" (broke skin/bite history), "rescue" (boolean).
-            Size: "small", "medium", "large" based on breed.`
-          },
-          { role: "user", content: message }
-        ]
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 400,
+        system: `Extract dog profile data from a customer message. Return ONLY valid JSON with these fields (use null if unknown):
+{
+  "ageMonths": number or null,
+  "isLargeBreed": boolean or null,
+  "breed": string or null,
+  "hasAggression": boolean,
+  "biteHistory": boolean,
+  "skinBroken": boolean,
+  "excitementBite": boolean,
+  "hasAnxiety": boolean,
+  "isRescue": boolean,
+  "hasObedience": boolean
+}
+
+Large breeds include: Rottweiler, Pitbull, German Shepherd, Mastiff, Great Dane, Doberman, Cane Corso, Bullmastiff, Bernese, Saint Bernard, Labrador (if large), Weimaraner, Ridgeback. 
+Age clues: "puppy"=~3mo, "8 weeks"=2mo, "6 months"=6mo, "1 year"=12mo, "2 years"=24mo.
+Excitement bite: young dog, bite described as accident/play/excited, no history of aggression.
+Return ONLY the JSON object, no explanation.`,
+        messages: [{ role: "user", content: userMessage }]
       })
     });
-    const data = await response.json();
-    return JSON.parse(data.choices[0].message.content);
-  } catch (e) { return null; }
+    const data = await res.json();
+    const text = data.content?.[0]?.text || "{}";
+    return JSON.parse(text.replace(/```json|```/g, "").trim());
+  } catch(e) {
+    log("Profile extract failed: " + e.message);
+    return null;
+  }
 }
 
-// ================= MAIN SEND FUNCTION =================
-async function sendMessage() {
-  const userMessage = inputBox.value.trim();
-  if (!userMessage) return;
-
-  appendMessage("user", userMessage);
-  conversation.push({ role: "user", content: userMessage });
-  inputBox.value = "";
-
-  // 1. Update Profile via AI
-  const structured = await classifyMessageWithAI(userMessage);
-  if (structured) {
-    if (structured.ageMonths) dogProfile.ageMonths = structured.ageMonths;
-    if (structured.sizeCategory) dogProfile.sizeCategory = structured.sizeCategory;
-    if (structured.rescue) dogProfile.isRescue = true;
-    if (structured.behaviorFlags) {
-        structured.behaviorFlags.forEach(f => {
-            if(!dogProfile.behaviorFlags.includes(f)) dogProfile.behaviorFlags.push(f);
-        });
-    }
-  }
-
-  // 2. Check for Discount Trigger (Manual check for 'expensive', 'price', 'can't afford')
-  let discountNote = "";
-  const priceTriggers = ["expensive", "pricey", "cost", "afford", "discount", "money"];
-  if (priceTriggers.some(word => userMessage.toLowerCase().includes(word)) && !dogProfile.offeredDiscount) {
-    dogProfile.offeredDiscount = true;
-    discountNote = "\n\n*Note: Since you mentioned concerns about the investment, I can actually offer you a 10% discount if we get started soon!*";
-  }
-
-  // 3. Determine if we have enough info to recommend
-  const recommended = determineProgram();
-
-  // 4. Generate Alma's Response
-  const loadingMessage = createLoadingMessage();
-  
+// ── Main reply ───────────────────────────────────────────────
+async function getAlmaReply() {
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
-        messages: conversation,
-        temperature: 0.4
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: buildSystemPrompt(),
+        messages: history
       })
     });
-
-    const data = await response.json();
-    let reply = data.choices[0].message.content;
-
-    // If we have a recommendation, append it professionally
-    if (recommended && !conversation.some(m => m.content.includes("recommend our"))) {
-        reply = `Based on what you've shared about your dog's needs, I recommend our **${recommended}** program. ${reply} ${discountNote}`;
-    } else if (discountNote) {
-        reply += discountNote;
-    }
-
-    removeLoadingMessage(loadingMessage);
-    appendMessage("assistant", reply);
-    conversation.push({ role: "assistant", content: reply });
-
-  } catch (err) {
-    removeLoadingMessage(loadingMessage);
-    appendMessage("assistant", "I'm having a little trouble connecting. Can you say that again?");
+    const data = await res.json();
+    return data.content?.[0]?.text || "Sorry, I missed that — can you say it again?";
+  } catch(e) {
+    log("Reply error: " + e.message);
+    return "Connection blip — give me a second and try again!";
   }
 }
 
-// UI Helpers
-function appendMessage(role, content) {
-  const msgDiv = document.createElement("div");
-  msgDiv.className = `message ${role}`;
-  msgDiv.innerHTML = `<strong>${role === 'user' ? 'You' : 'Alma'}:</strong> ${content}`;
-  outputDiv.appendChild(msgDiv);
-  outputDiv.scrollTop = outputDiv.scrollHeight;
+// ── Send flow ────────────────────────────────────────────────
+async function send() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  inputEl.value = "";
+  inputEl.style.height = "42px";
+  sendBtn.disabled = true;
+
+  addBubble("user", text);
+  history.push({ role: "user", content: text });
+
+  showTyping();
+
+  // Run profile extraction in parallel with reply generation
+  const [extracted, reply] = await Promise.all([
+    extractProfile(text),
+    (async () => {
+      // Small delay so profile extraction finishes before system prompt is built
+      await new Promise(r => setTimeout(r, 100));
+      return getAlmaReply();
+    })()
+  ]);
+
+  // Merge extracted profile
+  if (extracted) {
+    if (extracted.ageMonths !== null && extracted.ageMonths !== undefined) profile.ageMonths = extracted.ageMonths;
+    if (extracted.isLargeBreed !== null) profile.isLargeBreed = extracted.isLargeBreed;
+    if (extracted.breed) profile.breed = extracted.breed;
+    if (extracted.hasAggression) profile.hasAggression = true;
+    if (extracted.biteHistory)   profile.biteHistory = true;
+    if (extracted.skinBroken)    profile.skinBroken = true;
+    if (extracted.excitementBite) profile.excitementBite = true;
+    if (extracted.hasAnxiety)    profile.hasAnxiety = true;
+    if (extracted.isRescue)      profile.isRescue = true;
+    if (extracted.hasObedience)  profile.hasObedience = true;
+    log("Profile: " + JSON.stringify(profile));
+  }
+
+  hideTyping();
+  addBubble("alma", reply);
+  history.push({ role: "assistant", content: reply });
+
+  sendBtn.disabled = false;
+  inputEl.focus();
 }
 
-function createLoadingMessage() {
-  const msg = document.createElement("div");
-  msg.className = "message ai";
-  msg.innerHTML = "<strong>Alma:</strong> ...";
-  outputDiv.appendChild(msg);
-  return msg;
-}
+// ── Input events ─────────────────────────────────────────────
+sendBtn.addEventListener("click", send);
+inputEl.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
+});
+inputEl.addEventListener("input", () => {
+  inputEl.style.height = "42px";
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + "px";
+});
 
-function removeLoadingMessage(el) {
-  el.remove();
-}
-
-sendButton.addEventListener("click", sendMessage);
-inputBox.addEventListener("keydown", (e) => { if(e.key === "Enter") sendMessage(); });
-
+// ── Opening message ──────────────────────────────────────────
+(async () => {
+  showTyping();
+  await new Promise(r => setTimeout(r, 900));
+  hideTyping();
+  const opening = "Hey! I'm Alma from Dogwise Academy — thanks for reaching out. Tell me a bit about your dog. What's going on with them?";
+  addBubble("alma", opening);
+  history.push({ role: "assistant", content: opening });
+  inputEl.focus();
+})();
 </script>
 </body>
 </html>
