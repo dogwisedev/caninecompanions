@@ -214,6 +214,8 @@
     overflow-y: auto;
     flex-shrink: 0;
   }
+  #hs-loader { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  #chat-area { display: none; flex: 1; flex-direction: column; overflow: hidden; }
 </style>
 </head>
 <body>
@@ -229,7 +231,7 @@
   </div>
 
   <!-- HubSpot deal loader -->
-  <div id="hs-loader" style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div id="hs-loader">
     <div style="width:100%;max-width:420px;text-align:center;">
       <div style="font-size:32px;margin-bottom:12px;">🔗</div>
       <p style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--ink);margin-bottom:6px;">Load a HubSpot deal</p>
@@ -244,7 +246,7 @@
   </div>
 
   <!-- Chat area (hidden until loader done) -->
-  <div id="chat-area" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
+  <div id="chat-area">
     <div class="messages" id="messages"></div>
     <div class="input-area">
       <div class="input-row">
@@ -713,8 +715,9 @@ function setLoaderStatus(msg, success = false) {
   }
 }
 function hideLoader() {
-  if (loaderEl) loaderEl.style.display = "none";
-  document.getElementById("chat-area").style.display = "flex";
+  if (loaderEl) { loaderEl.style.display = "none"; loaderEl.style.visibility = "hidden"; }
+  const ca = document.getElementById("chat-area");
+  if (ca) { ca.style.display = "flex"; ca.style.visibility = "visible"; }
 }
 
 // ── Profile extractor ─────────────────────────────────────────
