@@ -565,16 +565,21 @@ function log(msg) {
   debugEl.textContent = msg;
 }
 
-// ── Profile extractor (Claude call) ─────────────────────────
+const GROQ_KEY = "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";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+// ── Profile extractor ────────────────────────────────────────
 async function extractProfile(userMessage) {
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch(GROQ_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${GROQ_KEY}` },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "llama-3.3-70b-versatile",
+        temperature: 0,
         max_tokens: 400,
-        system: `Extract dog profile data from a customer message. Return ONLY valid JSON with these fields (use null if unknown):
+        messages: [
+          { role: "system", content: `Extract dog profile data from a customer message. Return ONLY valid JSON with these exact fields (use null if unknown, false for booleans if not mentioned):
 {
   "ageMonths": number or null,
   "isLargeBreed": boolean or null,
@@ -589,20 +594,20 @@ async function extractProfile(userMessage) {
   "zip": string or null,
   "cityMentioned": string or null
 }
-
 Large breeds: Rottweiler, Pitbull, GSD, Mastiff, Great Dane, Doberman, Cane Corso, Bullmastiff, Bernese, Saint Bernard, Weimaraner, Ridgeback, Dogo Argentino.
-Age clues: "puppy"=3mo, "8 weeks"=2, "4 months"=4, "6 months"=6, "1 year"=12, "18 months"=18, "2 years"=24, "3 years"=36, "4 years"=48.
-excitementBite=true only if young + described as accidental/play + no aggression pattern.
-Also extract: "zip" (5-digit US ZIP if mentioned), "cityMentioned" (city name if mentioned).
-Return ONLY valid JSON with all original fields plus zip and cityMentioned. No explanation.`,
-        messages: [{ role: "user", content: userMessage }]
+Age clues: "puppy"=3, "8 weeks"=2, "4 months"=4, "6 months"=6, "1 year"=12, "18 months"=18, "2 years"=24, "3 years"=36, "4 years"=48.
+excitementBite=true only if young + described as accidental/play/excited + no aggression pattern.
+zip: 5-digit US ZIP if mentioned. cityMentioned: city name if mentioned.
+Return ONLY the JSON object. No markdown, no explanation.` },
+          { role: "user", content: userMessage }
+        ]
       })
     });
     const data = await res.json();
-    const text = data.content?.[0]?.text || "{}";
+    const text = data.choices?.[0]?.message?.content || "{}";
     return JSON.parse(text.replace(/```json|```/g, "").trim());
   } catch(e) {
-    log("Profile extract failed: " + e.message);
+    log("Extract err: " + e.message);
     return null;
   }
 }
@@ -610,18 +615,21 @@ Return ONLY valid JSON with all original fields plus zip and cityMentioned. No e
 // ── Main reply ───────────────────────────────────────────────
 async function getAlmaReply() {
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch(GROQ_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${GROQ_KEY}` },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.5,
         max_tokens: 1000,
-        system: buildSystemPrompt(),
-        messages: history
+        messages: [
+          { role: "system", content: buildSystemPrompt() },
+          ...history
+        ]
       })
     });
     const data = await res.json();
-    return data.content?.[0]?.text || "Sorry, I missed that — can you say it again?";
+    return data.choices?.[0]?.message?.content || "Sorry, missed that — can you say it again?";
   } catch(e) {
     log("Reply error: " + e.message);
     return "Connection blip — give me a second and try again!";
